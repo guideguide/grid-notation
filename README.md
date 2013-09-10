@@ -19,23 +19,30 @@ e.
 
 - a guide at the top, right, bottom, and left of the document.
 
-      | ~ | (v)
-      | ~ | (h)
+  ```
+  | ~ | (v)
+  | ~ | (h)
+  ```
   
 
 - a three row vertical grid
 
-      | ~ | ~ | ~ | ( v )
+  ```
+  | ~ | ~ | ~ | ( v )
+  ```
   
 
 - a one hundred pixel horizontal grid with a ten pixel left margin, ten pixel right margin, and a twenty pixel column centered in the middle
 
-      | 10px | ~ | 20px | ~ | 10px| ( h, 100px )
-  
+  ```
+  | 10px | ~ | 20px | ~ | 10px| ( h, 100px )
+  ```
 
 - a grid with a left side bar with 10px on either side, and a five columns filling the gap.
 
-      | 10px | 200px | 10px | ~ | ~ | ~ |
+  ```
+  | 10px | 200px | 10px | ~ | ~ | ~ |
+  ```
 
 ## Unit objects
 
@@ -69,11 +76,14 @@ An arbitrary gap is represented by a Unit Object and an optional multiplier. Arb
 
 #### Examples
 
-- `| 10px | 10px | 10px|`  
-  three ten pixel columns
+- three ten pixel columns
 
-- `| .5in | 1in | .5in |`  
-  one half inch column, one inch column, one half inch column
+  `| 10px | 10px | 10px|`
+  
+
+- one half inch column, one inch column, one half inch column
+
+  `| .5in | 1in | .5in |`
 
 ### Wildcard gaps
 
@@ -83,11 +93,13 @@ Due to their flexible nature, wildcards can be used to position a grid. When a s
 
 #### Examples
 
-- `| ~ |`  
-  A guide on the left and right side of the document or selection.
+- A guide on the left and right side of the document or selection.
 
-- `| ~ | ~ | ~ |`  
-  A three column grid
+  `| ~ |`
+
+- A three column grid
+
+  `| ~ | ~ | ~ |`
 
 ### Variables
 
@@ -133,24 +145,27 @@ A multiple is represented by an asterisk `*` followed by a number. The hunk will
 
 #### Examples
 
-- `| ~*2 | ~ |`  
-  Two thirds column, one third column
+- Two thirds column, one third column
 
-- ```
+  `| ~*2 | ~ |`
+
+- A three column grid with ten pixel gutters
+
+  ```
   $ =  ~ | 10px |
   | $*2 ~ |
   ```  
-  A three column grid with ten pixel gutters
 
 #### Fill
 
 A fill is represented by a asterisk `*` folowed by nothing and is a gap that will be recreated squentially until it fills the remaining space in the grid. This is useful for cases such as creating a baseline grid, or filling a space with as many columns and gutters of a certain width as will fit.
 
-- ```
+- A sixteen pixel baseline grid
+
+  ```
   $ = 16px |
   | $* ( v )
-  ```  
-  A sixteen pixel baseline grid
+  ```
 
 
 ## Grid Options
@@ -163,11 +178,9 @@ Determines the direction the grid will be rendered, whether horizontal or vertic
 
 #### Values:
 
-- `h` *(default)*  
-  horizontal
+- `h` *(default)* horizontal
 
-- `v`  
-  vertical
+- `v` vertical
 
 ### Position
 
@@ -175,14 +188,11 @@ Determines the position where GuideGuide renders the grid in cases where the gri
 
 #### Values:
 
-- `F`*(default)*  
-  first (left/top)
+- `F`*(default)* first (left/top)
 
-- `C`  
-  center
+- `C` center
 
-- `L`  
-  last (right/bottom)
+- `L` last (right/bottom)
 
 ### Remainder pixel distribution
 
@@ -190,14 +200,11 @@ Determines to which wildcards GuideGuide adds remainder pixels when the columns 
 
 #### Values:
 
-- `f`*(default)*  
-  first (left/top)
+- `f`*(default)* first (left/top)
 
-- `c`  
-  center
+- `c` center
 
-- `l`  
-  last (right/bottom)
+- `l` last (right/bottom)
 
 ### Calculation
 
@@ -205,11 +212,9 @@ Determines whether GuideGuide is strict about integers when calculating pixels
 
 #### Values:
 
-- `n` *(default)*  
-  normal
+- `n` *(default)* normal
 
-- `p`  
-  pixel specific
+- `p` pixel specific
 
 ### Grid width
 
@@ -226,14 +231,18 @@ Optional unit object that specifies how far from the origin the grid will be off
 
 #### Examples
 
-- `| 10px | ( hF, , 50px )`  
-  A ten pixel column that sits 50px from the left side of the document/selection
+- A ten pixel column that sits 50px from the left side of the document/selection
 
-- `| 10px | ( hL, , 50px )`  
-  A ten pixel column that sits 50px from the right site of the doucment/selection
+  `| 10px | ( hF, , 50px )`
 
-- `| 10px | ( hL, 100px, 30px)`  
-  A ten pixel wide column that sits 30px from the right side of a 100px selection.
+
+- A ten pixel column that sits 50px from the right site of the doucment/selection
+
+  `| 10px | ( hL, , 50px )`
+
+- A ten pixel wide column that sits 30px from the right side of a 100px selection.
+
+  `| 10px | ( hL, 100px, 30px)`
 
 ## Errors
 
