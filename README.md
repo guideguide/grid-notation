@@ -1,11 +1,4 @@
----
-layout: default
-permalink: /guideguide-notation/
-title: GuideGuide Notation
-description: Give GuideGuide instructions for detailed grids.
----
-
-# Think Beyond The Form
+# GuideGuide Notation
 
 GuideGuide’s grid form is a great tool, but it is somewhat limited in what it can do. To give you more flexibility with your grids, GuideGuide includes a feature called GuideGuide Notation, a special language that allows you to give instructions to GuideGuide, telling it where you would like to put guides within your document or selection.
 
