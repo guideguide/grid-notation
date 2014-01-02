@@ -20,22 +20,22 @@ e.
 - a guide at the top, right, bottom, and left of the document.
 
   ```
-  | ~ | (v)
   | ~ | (h)
+  | ~ | (v)
   ```
   
 
 - a three row vertical grid
 
   ```
-  | ~ | ~ | ~ | ( v )
+  | ~ | ~ | ~ | ( h )
   ```
   
 
 - a one hundred pixel horizontal grid with a ten pixel left margin, ten pixel right margin, and a twenty pixel column centered in the middle
 
   ```
-  | 10px | ~ | 20px | ~ | 10px| ( h, 100px )
+  | 10px | ~ | 20px | ~ | 10px| ( v, 100px )
   ```
 
 - a grid with a left side bar with 10px on either side, and a five columns filling the gap.
@@ -164,7 +164,7 @@ A fill is represented by a asterisk `*` folowed by nothing and is a gap that wil
 
   ```
   $ = 16px |
-  | $* ( v )
+  | $* ( h )
   ```
 
 
@@ -174,7 +174,7 @@ Optional values to modify how the grid is created.
 
 ### Orientation
 
-Determines the direction the grid will be rendered, whether horizontal or vertical. Orientation options are *not* case sensitve.
+Determines the orientation of the guides in the grid. Orientation options are *not* case sensitve.
 
 #### Values:
 
@@ -222,7 +222,7 @@ Optional unit object that specifies the width of the grid area to be used for th
 
 #### Examples:
 
-- `| ~ | ~ | ~ | ( h, 100px )`  
+- `| ~ | ~ | ~ | ( v, 100px )`  
   A three column grid that is one hundred pixels wide.
 
 ### Grid offset
@@ -233,16 +233,16 @@ Optional unit object that specifies how far from the origin the grid will be off
 
 - A ten pixel column that sits 50px from the left side of the document/selection
 
-  `| 10px | ( hF, , 50px )`
+  `| 10px | ( vF, , 50px )`
 
 
 - A ten pixel column that sits 50px from the right site of the doucment/selection
 
-  `| 10px | ( hL, , 50px )`
+  `| 10px | ( vL, , 50px )`
 
 - A ten pixel wide column that sits 30px from the right side of a 100px selection.
 
-  `| 10px | ( hL, 100px, 30px)`
+  `| 10px | ( vL, 100px, 30px)`
 
 ## Errors
 
