@@ -25,7 +25,7 @@ e.
   ```
   
 
-- a three column vertical grid
+- a three row vertical grid
 
   ```
   | ~ | ~ | ~ | ( h )
