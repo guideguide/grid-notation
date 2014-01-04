@@ -248,9 +248,6 @@ Optional unit object that specifies how far from the origin the grid will be off
 
 GuideGuide String Notation errors will be denoted in curly brackets. Directly following a bracketed error will be a set of brackets containing a comma separated list of error IDs. Explanation of the errors will be printed below the grid.
 
-
-### Hunk errors
-
 ```
 | 10px | { 10foo [1]} | 10px|
 
