@@ -123,7 +123,7 @@ A variable call is represented by a dollar sign `$`, an optional id, and an opti
 
 ```
 $ = ~ |
-| $*2
+| $*3
 ```
 
 expands to:
