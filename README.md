@@ -87,7 +87,7 @@ An arbitrary gap is represented by a Unit Object and an optional multiplier. Arb
 
 ### Wildcard gaps
 
-A wildcard hunk is represented by a tilde `~`. Any area within a grid that remains after all of the arbitrary hunks have been calculated will be evenly distributed amongst the wildcards present in a grid.
+A wildcard gap is represented by a tilde `~`. Any area within a grid that remains after all of the arbitrary gaps have been calculated will be evenly distributed amongst the wildcards present in a grid.
 
 Due to their flexible nature, wildcards can be used to position a grid. When a single wildcard is placed to the left of a GGN string, it will force the grid to render on the right side. Similarly, a GGN string with wildcards on either end will be centered.
 
@@ -103,11 +103,11 @@ Due to their flexible nature, wildcards can be used to position a grid. When a s
 
 ### Variables
 
-Variables allow you to define and reuse collections of hunks within a grid. Variables are composed of a definition and a call.
+Variables allow you to define and reuse collections of gaps within a grid. Variables are composed of a definition and a call.
 
 #### Define
 
-> $&lt;id&gt; = &lt;hunks&gt;
+> $&lt;id&gt; = &lt;gaps&gt;
 
 A variable definition is represented by a dollar sign `$`, an optional id, an equals sign, and then a collection of gaps and guides separated by spaces.
 
@@ -141,7 +141,7 @@ Arbitray, wildcard, and variable gaps can accept a final modifier that will dupl
 
 #### Multiple
 
-A multiple is represented by an asterisk `*` followed by a number. The hunk will be recreated sequentially the number of times specified by the multiple
+A multiple is represented by an asterisk `*` followed by a number. The gap will be recreated sequentially the number of times specified by the multiple
 
 #### Examples
 
