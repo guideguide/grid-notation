@@ -174,7 +174,7 @@ Optional values to modify how the grid is created.
 
 ### Orientation
 
-Determines the orientation of the guides in the grid. Orientation options are *not* case sensitve.
+Determines the orientation of the guides in the grid.
 
 #### Values:
 
@@ -184,7 +184,7 @@ Determines the orientation of the guides in the grid. Orientation options are *n
 
 ### Remainder pixel distribution
 
-Determines to which wildcards GuideGuide adds remainder pixels when the columns do not divide equally into the total width of the grid area. Note the lowercase letters.
+Determines to which wildcards GuideGuide adds remainder pixels when the columns do not divide equally into the total width of the grid area.
 
 #### Values:
 
