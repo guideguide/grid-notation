@@ -182,18 +182,6 @@ Determines the orientation of the guides in the grid. Orientation options are *n
 
 - `v` vertical
 
-### Position
-
-Determines the position where GuideGuide renders the grid in cases where the grid specified is not as wide as the document or selection. Note the capital letters.
-
-#### Values:
-
-- `F`*(default)* first (left/top)
-
-- `C` center
-
-- `L` last (right/bottom)
-
 ### Remainder pixel distribution
 
 Determines to which wildcards GuideGuide adds remainder pixels when the columns do not divide equally into the total width of the grid area. Note the lowercase letters.
@@ -227,7 +215,7 @@ Optional unit object that specifies the width of the grid area to be used for th
 
 ### Grid offset
 
-Optional unit object that specifies how far from the origin the grid will be offset. When the position of a grid is set to `center` the offset property will be ignored.
+Optional unit object that specifies how far from the origin the grid will be offset.
 
 #### Examples
 
