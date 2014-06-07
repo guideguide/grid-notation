@@ -170,7 +170,14 @@ A fill is represented by a asterisk `*` folowed by nothing and is a gap that wil
 
 ## Grid Options
 
-Optional values to modify how the grid is created.
+> (&lt;modifiers&gt;,  &lt;adjustments&gt;)
+
+Optional values to modify how the grid is created. They are wrapped in parens and broken into two sections separated by a comma.
+
+#### Examples
+
+- `(vfp, ~|~)`  
+  A grid of vertical guides, with "first" remainder distribution, in pixel mode. The grid is centered.
 
 ### Orientation
 
@@ -204,33 +211,50 @@ Determines whether GuideGuide is strict about integers when calculating pixels
 
 - `p` pixel specific
 
-### Grid width
+### Grid adjust
 
-Optional unit object that specifies the width of the grid area to be used for the calculation. Must be a positive value. The width option can be left blank.
+> &lt;left offset&gt; | &lt;width&gt; | &lt;right offset&gt;
+
+A string similar to Grid notation that specifies the left and right offsets and width of the grid, separated by pipes (which represent the edges of the grid).
+
+Width is defined by enclosing a unit object in pipes. The tilde `~` can be used similarly to the way wildcards are used.
 
 #### Examples:
 
-- `| ~ | ~ | ~ | ( v, 100px )`  
-  A three column grid that is one hundred pixels wide.
+- `(v, |100px|)`  
+  A one hundred pixel wide grid.
 
-### Grid offset
+- `(v, |~|)`  
+  A full width grid (default)
 
-Optional unit object that specifies how far from the origin the grid will be offset.
+Position works similarly to how CSS works. Think of the `~` as "auto". To define the left or right offset, place a `~` or unit object on either side of the pipes.
 
-#### Examples
+#### Examples:
 
-- A ten pixel column that sits 50px from the left side of the document/selection
+- `(v, 20px|100px|)`  
+  A one hundred pixel wide grid, twenty pixels from the left side.
 
-  `| 10px | ( vF, , 50px )`
+- `(v, |100px|20px)`  
+  A one hundred pixel wide grid, twenty pixels from the right side.
 
+- `(v, 20px|100px|20px)`  
+  A one hundred pixel wide grid, twenty pixels from the left side (the right offset is ignored if a left and right offset is specified with a defined width).
 
-- A ten pixel column that sits 50px from the right site of the doucment/selection
+- `(v, 20px|~|20px)`  
+  A grid with a width that is 40px less than the width of the document, with 20px space on either side.
 
-  `| 10px | ( vL, , 50px )`
+- `(v, ~|100px|)`  
+  A right aligned, one hundred pixel wide grid.
 
-- A ten pixel wide column that sits 30px from the right side of a 100px selection.
+- `(v, ~|100px|~)`  
+  A centered, one hundred pixel wide grid.
 
-  `| 10px | ( vL, 100px, 30px)`
+For width to be specified, it **must** have a pipe on either side. If only one pipe between two values is specified, the values will be treated as left and right offsets. If a third pipe exists, it and anything after it is ignored.
+
+#### Examples:
+
+- `(v, ~|~)`  
+  A centered grid.
 
 ## Errors
 
