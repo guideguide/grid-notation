@@ -23,14 +23,14 @@ e.
   | ~ | (h)
   | ~ | (v)
   ```
-  
+
 
 - a three row vertical grid
 
   ```
   | ~ | ~ | ~ | ( h )
   ```
-  
+
 
 - a one hundred pixel horizontal grid with a ten pixel left margin, ten pixel right margin, and a twenty pixel column centered in the middle
 
@@ -79,7 +79,7 @@ An arbitrary gap is represented by a Unit Object and an optional multiplier. Arb
 - three ten pixel columns
 
   `| 10px | 10px | 10px|`
-  
+
 
 - one half inch column, one inch column, one half inch column
 
