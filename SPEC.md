@@ -4,7 +4,7 @@ GuideGuide’s grid form is a great tool, but it is somewhat limited in what it 
 
 ## Grids
 
-> &lt;guides and gaps&gt; ( &lt;options&gt;, &lt;grid width&gt;, &lt;grid offset&gt; )
+> &lt;commands&gt; ( &lt;options&gt;, &lt;first offset&gt; | &lt;width&gt; | &lt;last offset&gt; )
 
 A grid is a collection of guides and gaps across a single dimentional plane. GuideGuide will split the string into an array of guides and gaps and iterate through them, following them like instructions. Starting at 0, for each gap, GuideGuide will advance its insertion point by the value of the gap. When GuideGuide encounters a guide, it will place a guide at the current location of the insertion point. This will continue until all guides and gaps have been parsed.
 
