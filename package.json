@@ -12,7 +12,7 @@
   },
   "main": "lib/GridNotation.js",
   "scripts": {
-    "test": "script/test"
+    "test": "mocha --compilers coffee:coffee-script/register"
   },
   "repository" : {
     "type" : "git",
