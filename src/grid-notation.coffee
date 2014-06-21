@@ -160,6 +160,14 @@ class GridNotation
 
     trim string.replace(/\n\n\n+/g, "\n")
 
+  # Test if a GridNotation string is valid.
+  #
+  #   string = GridNotation to test
+  #
+  # Returns a Boolean.
+  test: (string) =>
+    @validate(@objectify(string)).errors.length is 0
+
   # Create an object of grid data from a Guide Notation String
   #
   #   string - string to parse

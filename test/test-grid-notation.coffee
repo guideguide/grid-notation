@@ -115,6 +115,14 @@ describe 'Grid Notation', ->
       10px | $A | (vl)
       """, info), out
 
+  describe "Testing", ->
+
+    it 'should succeed for good grid notation', ->
+      assert GN.test("|10px|")
+
+    it 'should fail for bad grid notation', ->
+      assert GN.test("|foo|") is false
+
   describe "Objectification", ->
 
     it 'should objectify', ->
