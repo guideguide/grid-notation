@@ -1,7 +1,5 @@
 # Grid notation
 
-After a few years of using GuideGuide, I became frustrated that I couldn't move beyond simple grid structures. What if I wanted a sidebar? What if I wanted to reposition the grid in the document? Grid notation is written language for given commands to a grid parser. A string goes in, an array of guides comes out.
-
 ## Grids
 
 > &lt;commands&gt; [( [&lt;options&gt;][, &lt;first offset&gt; | &lt;width&gt; | &lt;last offset&gt; ])]
