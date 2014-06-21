@@ -3,4 +3,4 @@
 #
 # compile Grid Notation for publishing
 
-coffee -o . -c ./src/GridNotation.coffee
+coffee -o . -c ./src/grid-notation.coffee
