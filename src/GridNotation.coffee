@@ -248,7 +248,7 @@ class GridNotation
         error(4, errors, command) if fills > 1
         error(5, errors, command) if id and variable and varHasFill
 
-    errors: errors
+    errors: errors.sort()
     obj: obj
 
   # Convert a string of command and guide commands into an object.
