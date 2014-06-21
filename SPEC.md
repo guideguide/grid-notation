@@ -261,3 +261,31 @@ When cleaning a guide notation string, errors will be denoted in curly brackets.
 ```
 | 10px | { 10foo [1]} | 10px|
 ```
+
+### Possible errors
+
+These scenarios will invalidate guide notation
+
+##### Error: 1 — Unrecognized command
+
+The parser does not understand the given command, or no unit was specified.
+
+##### Error: 2 — No grids
+
+A guide notation string must contain at least one grid.
+
+##### Error: 3 — Wildcards cannot be fills
+
+Because wildcards have no width of their own, trying to use them as a fill is dividing by zero.
+
+#### Error: 4 — Grids can only contain one fill
+
+Because fills are used to fill up all available space, it isn't possible to have more than one fill.
+
+##### Error: 5 — Variables cannot contain fills
+
+Because variables are intended for using multiple times, placing a fill in a variable would result in multiple fills. Technically this *should* be valid if the variable is only used once, however the logic to support this isn't worth supporting a case that technically shouldn't be used.
+
+##### Error: 6 — A variable must be defined
+
+If a variable has not been defined at the time it is called, it cannot be used.
