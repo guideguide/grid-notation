@@ -27,21 +27,21 @@ describe 'Commands', ->
       assert.strictEqual Command.isVariable("1"), false
       assert.strictEqual Command.isVariable("1px"), false
 
-    it 'should succeed for arbitrary commands', ->
-      assert.strictEqual Command.isArbitrary("1cm"), true
-      assert.strictEqual Command.isArbitrary("1in"), true
-      assert.strictEqual Command.isArbitrary("1mm"), true
-      assert.strictEqual Command.isArbitrary("1px"), true
-      assert.strictEqual Command.isArbitrary("1pt"), true
-      assert.strictEqual Command.isArbitrary("1pica"), true
-      assert.strictEqual Command.isArbitrary("1%"), true
+    it 'should succeed for explicit commands', ->
+      assert.strictEqual Command.isExplicit("1cm"), true
+      assert.strictEqual Command.isExplicit("1in"), true
+      assert.strictEqual Command.isExplicit("1mm"), true
+      assert.strictEqual Command.isExplicit("1px"), true
+      assert.strictEqual Command.isExplicit("1pt"), true
+      assert.strictEqual Command.isExplicit("1pica"), true
+      assert.strictEqual Command.isExplicit("1%"), true
 
-    it 'should fail for non-arbitrary commands', ->
-      assert.strictEqual Command.isArbitrary(""), false
-      assert.strictEqual Command.isArbitrary("1"), false
-      assert.strictEqual Command.isArbitrary("foo"), false
-      assert.strictEqual Command.isArbitrary("$"), false
-      assert.strictEqual Command.isArbitrary("$A = | 10px |"), false
+    it 'should fail for non-explicit commands', ->
+      assert.strictEqual Command.isExplicit(""), false
+      assert.strictEqual Command.isExplicit("1"), false
+      assert.strictEqual Command.isExplicit("foo"), false
+      assert.strictEqual Command.isExplicit("$"), false
+      assert.strictEqual Command.isExplicit("$A = | 10px |"), false
 
     it 'should succeed for wildcards', ->
       assert.strictEqual Command.isWildcard("~"), true
@@ -97,10 +97,10 @@ describe 'Commands', ->
         isFill: false
         multiplier: 2
 
-    it 'should parse arbitrary', ->
+    it 'should parse explicit', ->
       assert.deepEqual Command.parse("10px*2"),
         isValid: true
-        isArbitrary: true
+        isExplicit: true
         isFill: false
         isPercent: false
         unit:
@@ -134,7 +134,7 @@ describe 'Commands', ->
       assert.equal Command.count("~*"), 1
       assert.equal Command.count("~*2"), 2
 
-    it 'should count arbitrary multiples', ->
+    it 'should count explicit multiples', ->
       assert.equal Command.count("1px"), 1
       assert.equal Command.count("1px*"), 1
       assert.equal Command.count("1px*2"), 2
@@ -177,10 +177,10 @@ describe 'Commands', ->
         isFill: false
         multiplier: 2
 
-    it 'should convert arbitrary commands to strings', ->
+    it 'should convert explicit commands to strings', ->
       assert.equal "10px*2", Command.toString
         isValid: true
-        isArbitrary: true
+        isExplicit: true
         isFill: false
         isPercent: false
         unit:

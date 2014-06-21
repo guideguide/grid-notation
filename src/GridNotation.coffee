@@ -33,17 +33,17 @@ class GridNotation
       adjustRemainder  = 0
       wildcards        = find grid.commands, (el) -> el.isWildcard
 
-      # Measure arbitrary commands
-      arbitrary = find grid.commands, (el) -> el.isArbitrary and !el.isFill
-      arbitrarySum = 0
-      arbitrarySum += command.unit.base for command in arbitrary
+      # Measure explicit commands
+      explicit = find grid.commands, (el) -> el.isExplicit and !el.isFill
+      explicitSum = 0
+      explicitSum += command.unit.base for command in explicit
 
       # If a width was specified, position it. If it wasn't, subtract the offsets
       # from the boundaries.
       if grid.params.width?.unit?.base
         adjustRemainder = originalWidth - grid.params.width?.unit.base
       else
-        adjustRemainder = originalWidth - arbitrarySum if wildcards.length == 0
+        adjustRemainder = originalWidth - explicitSum if wildcards.length == 0
         measuredWidth -= grid.params.firstOffset?.unit?.base || 0
         measuredWidth -= grid.params.lastOffset?.unit?.base || 0
       if adjustRemainder > 0
@@ -64,7 +64,7 @@ class GridNotation
       # Adjust the first offset.
       offset += grid.params.firstOffset?.unit.base || 0
 
-      wildcardArea = measuredWidth - arbitrarySum
+      wildcardArea = measuredWidth - explicitSum
 
       # Calculate fills
       if wildcardArea and fill
@@ -93,7 +93,7 @@ class GridNotation
 
         for command in wildcards
           command.isWildcard = false
-          command.isArbitrary = true
+          command.isExplicit = true
           command.isFill = true
           command.multiplier = 1
           command.isPercent = false
@@ -460,7 +460,7 @@ class GridNotation
 #
 class Command
   variableRegexp: /^\$([^\*]+)?(\*(\d+)?)?$/i
-  arbitraryRegexp: /^(([-0-9\.]+)?[a-z%]+)(\*(\d+)?)?$/i
+  explicitRegexp: /^(([-0-9\.]+)?[a-z%]+)(\*(\d+)?)?$/i
   wildcardRegexp: /^~(\*(\d*))?$/i
 
   constructor: (args = {}) ->
@@ -494,13 +494,13 @@ class Command
   #   string - command string to test
   #
   # Returns a Boolean
-  isArbitrary: (command = "") =>
+  isExplicit: (command = "") =>
     if typeof command is "string"
-      return false if !@arbitraryRegexp.test command.replace /\s/g, ''
+      return false if !@explicitRegexp.test command.replace /\s/g, ''
       return false if @unit.parse(command) == null
       true
     else
-      command.isArbitrary || false
+      command.isExplicit || false
 
   # Test if a command is a wildcard
   #
@@ -536,8 +536,8 @@ class Command
     if @isVariable string
       bits = @variableRegexp.exec string
       return bits[2] && !bits[3] || false
-    else if @isArbitrary string
-      bits = @arbitraryRegexp.exec string
+    else if @isExplicit string
+      bits = @explicitRegexp.exec string
       return bits[3] && !bits[4] || false
     else if @isWildcard string
       bits = @wildcardRegexp.exec string
@@ -554,8 +554,8 @@ class Command
     string = string.replace /\s/g, ''
     if @isVariable string
       parseInt(@variableRegexp.exec(string)[3]) || 1
-    else if @isArbitrary string
-      parseInt(@arbitraryRegexp.exec(string)[4]) || 1
+    else if @isExplicit string
+      parseInt(@explicitRegexp.exec(string)[4]) || 1
     else if @isWildcard string
       parseInt(@wildcardRegexp.exec(string)[2]) || 1
     else
@@ -578,9 +578,9 @@ class Command
       isFill: @isFill string
       id: if bits[1] then "$#{ bits[1] }" else "$"
       multiplier: @count string
-    else if @isArbitrary string
+    else if @isExplicit string
       isValid: true
-      isArbitrary: true
+      isExplicit: true
       isPercent: @isPercent string
       isFill: @isFill string
       unit: @unit.parse(string)
@@ -607,7 +607,7 @@ class Command
       string += "|"
     else if command.isVariable
       string += command.id
-    else if command.isArbitrary
+    else if command.isExplicit
       string += @unit.toString(command.unit)
     else if command.isWildcard
       string += "~"
@@ -615,7 +615,7 @@ class Command
       return "" if command.string is ""
       string += command.string
 
-    if command.isVariable or command.isArbitrary or command.isWildcard
+    if command.isVariable or command.isExplicit or command.isWildcard
       string += '*' if command.isFill or command.multiplier > 1
       string += command.multiplier if command.multiplier > 1
 

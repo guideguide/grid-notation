@@ -67,11 +67,11 @@ Guides are represented by a pipe `|`. These tell the parser to place a guide at 
 
 Commands are unit objects or variables combined with multipliers to define spaces between guides.
 
-### Arbitrary commands
+### Explicit commands
 
 > &lt;value&gt;&lt;unit&gt;[*[&lt;multiplier&gt;]]
 
-An arbitrary command is represented by a Unit Object and an optional multiplier. Arbitrary commands are the width of the unit specified. Arbitrary can be positive or negative. Due to this, it is possible to traverse backwards and forwards.
+An explicit command is represented by a Unit Object and an optional multiplier. Explicit commands are the width of the unit specified. Explicit can be positive or negative. Due to this, it is possible to traverse backwards and forwards.
 
 #### Examples
 
@@ -87,7 +87,7 @@ An arbitrary command is represented by a Unit Object and an optional multiplier.
 
 > ~[*[&lt;multiplier&gt;]]
 
-A wildcard command is represented by a tilde `~`. Any area within a grid that remains after all of the arbitrary commands have been calculated will be evenly distributed amongst the wildcards present in a grid.
+A wildcard command is represented by a tilde `~`. Any area within a grid that remains after all of the explicit commands have been calculated will be evenly distributed amongst the wildcards present in a grid.
 
 #### Examples
 
@@ -135,7 +135,7 @@ a three column grid
 
 ### Multiples and fills
 
-Arbitrary, wildcard, and variable commands can accept a final modifier that will duplicate that command the number of times specified. These are most helpful when used with variables, as it is possible to specify both commands and guide together. Multiples and fills can be specified on non-guide commands, but since the result of the multiplied command is not visible, their usefulness is rare.
+Explicit, wildcard, and variable commands can accept a final modifier that will duplicate that command the number of times specified. These are most helpful when used with variables, as it is possible to specify both commands and guide together. Multiples and fills can be specified on non-guide commands, but since the result of the multiplied command is not visible, their usefulness is rare.
 
 #### Multiple
 
