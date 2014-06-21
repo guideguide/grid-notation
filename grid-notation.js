@@ -16,6 +16,7 @@
       this.isCommands = __bind(this.isCommands, this);
       this.validate = __bind(this.validate, this);
       this.objectify = __bind(this.objectify, this);
+      this.test = __bind(this.test, this);
       this.clean = __bind(this.clean, this);
       this.unit = new Unit();
       this.cmd = new Command();
@@ -212,6 +213,10 @@
         string += "" + (trim(line)) + "\n";
       }
       return trim(string.replace(/\n\n\n+/g, "\n"));
+    };
+
+    GridNotation.prototype.test = function(string) {
+      return this.validate(this.objectify(string)).errors.length === 0;
     };
 
     GridNotation.prototype.objectify = function(string) {
