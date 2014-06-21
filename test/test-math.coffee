@@ -18,7 +18,7 @@ info =
 
 # There are millions of combinations of things to test. This file includes
 # common grid scenarios to see if the math is being done correctly.
-describe 'Scenarios', ->
+describe 'Math', ->
 
   describe 'basic', ->
 
