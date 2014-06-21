@@ -32,18 +32,18 @@ describe 'Grid Notation', ->
       """
       expected = """
       $ = | 10px |
-      | $ | ~ | {foo} | ( vl )
+      | $ | ~ | {foo [1]} | ( vl )
       """
       assert.equal GN.clean(gn), expected
 
     it 'should detect bad commands in variables', ->
-      assert.equal GN.clean("$=|foo|"), "$ = | {foo} |"
+      assert.equal GN.clean("$=|foo|"), "$ = | {foo [1]} |"
 
     it 'should detect fills in variables', ->
-      assert.equal GN.clean("$=|10px*|"), "$ = | {10px*} |"
+      assert.equal GN.clean("$=|10px*|"), "$ = | {10px* [5]} |"
 
-    it 'should detect bad adjustments', ->
-      assert.equal GN.clean("|~|(hl,foo|~|~)"), "| ~ | ( hl, {foo} | ~ | ~ )"
+    it.only 'should detect bad adjustments', ->
+      assert.equal GN.clean("|~|(hl,foo|~|~)"), "| ~ | ( hl, {foo [1]} | ~ | ~ )"
 
     it 'should detect undefined variables in variables', ->
       gn = """
@@ -52,12 +52,12 @@ describe 'Grid Notation', ->
       """
       expected = """
       $ = ~
-      | {$a} | ( hl )
+      | {$a [6]} | ( hl )
       """
       assert.equal GN.clean(gn), expected
 
     it 'should detect undefined variables in grids', ->
-      assert.equal GN.clean("$ = $a"), "$ = {$a}"
+      assert.equal GN.clean("$ = $a"), "$ = {$a [6]}"
 
     it 'should detect fill variables containing wildcards', ->
       gn = """
@@ -66,15 +66,15 @@ describe 'Grid Notation', ->
       """
       expected = """
       $ = ~
-      {$*} ( hl )
+      {$* [3]} ( hl )
       """
       assert.equal GN.clean(gn), expected
 
     it 'should detect fill wildcards', ->
-      assert.equal GN.clean("~*"), "{~*} ( hl )"
+      assert.equal GN.clean("~*"), "{~* [3]} ( hl )"
 
     it 'should detect multiple fills', ->
-      assert.equal GN.clean("10px*|10px*"), "10px* | {10px*} ( hl )"
+      assert.equal GN.clean("10px*|10px*"), "10px* | {10px* [4]} ( hl )"
 
     it 'should detect multiple fills when used in variables', ->
       gn = """
@@ -82,8 +82,8 @@ describe 'Grid Notation', ->
       $ | 10px*
       """
       expected = """
-      $ = {10px*}
-      {$} | {10px*} ( hl )
+      $ = {10px* [5]}
+      {$ [5]} | {10px* [4]} ( hl )
       """
       assert.equal GN.clean(gn), expected
 
@@ -124,7 +124,7 @@ describe 'Grid Notation', ->
 
     it 'should stringify command strings', ->
       assert.equal GN.stringifyCommands(GN.parseCommands("|10px|")), "| 10px |"
-      assert.equal GN.stringifyCommands(GN.parseCommands("|foo|")), "| {foo} |"
+      assert.equal GN.stringifyCommands(GN.parseCommands("|foo|")), "| {foo [1]} |"
 
     it 'should stringify params', ->
       gn = GN.parseGrid "|~|(vl, ~|~|~)"

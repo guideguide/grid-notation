@@ -619,7 +619,7 @@ class Command
       string += '*' if command.isFill or command.multiplier > 1
       string += command.multiplier if command.multiplier > 1
 
-    if command.errors.length is 0 then string else "{#{ string }}"
+    if command.errors.length is 0 then string else "{#{ string } [#{ command.errors.join(',') }]}"
 
   # Create a command string without a multiplier
   #
@@ -628,7 +628,7 @@ class Command
   # Returns a String.
   toSimpleString: (command = "") ->
     return command.replace(/\*.*/gi, "") if typeof command is "string"
-    @stringify(command).replace(/[\{\}]|\*.*/gi, "")
+    @stringify(command).replace(/[\{\}]|\*.*|\[\d*\]/gi, "")
 
 #
 # Unit is a utility for parsing and validating unit strings
