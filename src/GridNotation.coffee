@@ -430,7 +430,7 @@ class GridNotation
   # Returns a String.
   stringifyCommands: (commands) =>
     string = ""
-    string += @cmd.toString(command) for command in commands
+    string += @cmd.stringify(command) for command in commands
     @pipeCleaner string
 
   # Convert a grid's params to a guiden notation spec compliant string.
@@ -447,10 +447,10 @@ class GridNotation
     if params.firstOffset or params.width or params.lastOffset
       string += ", " if string.length > 0
 
-    string += @cmd.toString(params.firstOffset) if params.firstOffset
-    string += "|#{ @cmd.toString(params.width) }|" if params.width
+    string += @cmd.stringify(params.firstOffset) if params.firstOffset
+    string += "|#{ @cmd.stringify(params.width) }|" if params.width
     string += "|" if params.firstOffset and params.lastOffset and !params.width
-    string += @cmd.toString(params.lastOffset) if params.firstOffset
+    string += @cmd.stringify(params.lastOffset) if params.firstOffset
 
     if string then "( #{ @pipeCleaner(string) } )" else ''
 
@@ -599,7 +599,7 @@ class Command
   #   command - command to be converted to a string
   #
   # Returns an Integer.
-  toString: (command = "") ->
+  stringify: (command = "") ->
     return command if typeof command is "string"
     string = ""
 
@@ -608,7 +608,7 @@ class Command
     else if command.isVariable
       string += command.id
     else if command.isExplicit
-      string += @unit.toString(command.unit)
+      string += @unit.stringify(command.unit)
     else if command.isWildcard
       string += "~"
     else
@@ -628,7 +628,7 @@ class Command
   # Returns a String.
   toSimpleString: (command = "") ->
     return command.replace(/\*.*/gi, "") if typeof command is "string"
-    @toString(command).replace(/[\{\}]|\*.*/gi, "")
+    @stringify(command).replace(/[\{\}]|\*.*/gi, "")
 
 #
 # Unit is a utility for parsing and validating unit strings
@@ -716,9 +716,9 @@ class Unit
   #   unit = string or object
   #
   # Returns a string
-  toString: (unit = "") =>
+  stringify: (unit = "") =>
     return null if unit == ""
-    return @toString(@parse(unit)) if typeof unit == "string"
+    return @stringify(@parse(unit)) if typeof unit == "string"
 
     "#{ unit.value }#{ unit.type }"
 

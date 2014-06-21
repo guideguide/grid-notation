@@ -147,18 +147,18 @@ describe 'Commands', ->
   describe 'Strings', ->
 
     it 'should convert guide commands to strings', ->
-      assert.equal "|", Command.toString
+      assert.equal "|", Command.stringify
         errors: []
         isGuide: true
 
     it 'should convert variable commands to strings', ->
-      assert.equal "$", Command.toString
+      assert.equal "$", Command.stringify
         errors: []
         isVariable: true
         isFill: false
         id: "$"
         multiplier: 1
-      assert.equal "$foo*2", Command.toString
+      assert.equal "$foo*2", Command.stringify
         errors: []
         isVariable: true
         isFill: false
@@ -166,19 +166,19 @@ describe 'Commands', ->
         multiplier: 2
 
     it 'should convert wildcard commands to strings', ->
-      assert.equal "~", Command.toString
+      assert.equal "~", Command.stringify
         errors: []
         isWildcard: true
         isFill: false
         multiplier: 1
-      assert.equal "~*2", Command.toString
+      assert.equal "~*2", Command.stringify
         errors: []
         isWildcard: true
         isFill: false
         multiplier: 2
 
     it 'should convert explicit commands to strings', ->
-      assert.equal "10px*2", Command.toString
+      assert.equal "10px*2", Command.stringify
         errors: []
         isExplicit: true
         isFill: false

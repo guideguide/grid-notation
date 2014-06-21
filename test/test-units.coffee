@@ -95,11 +95,11 @@ describe 'Units', ->
   describe 'To string', ->
 
     it 'should return null when given nothing', ->
-      assert.strictEqual Unit.toString(), null
-      assert.strictEqual Unit.toString(""), null
+      assert.strictEqual Unit.stringify(), null
+      assert.strictEqual Unit.stringify(""), null
 
     it 'should return string when given a unit object', ->
-      assert.equal Unit.toString(Unit.parse("1px")), "1px"
+      assert.equal Unit.stringify(Unit.parse("1px")), "1px"
 
     it 'should return string when given a string', ->
-      assert.equal Unit.toString("1px"), "1px"
+      assert.equal Unit.stringify("1px"), "1px"
