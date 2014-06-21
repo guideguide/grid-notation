@@ -1,6 +1,6 @@
 assert = require "assert"
 GridNotation = require "
-  #{ process.cwd() }/src/GridNotation.coffee
+  #{ process.cwd() }/src/grid-notation.coffee
 "
 GN = GridNotation.notation
 Unit = GridNotation.unit
