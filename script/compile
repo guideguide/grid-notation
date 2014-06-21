@@ -1,0 +1,6 @@
+#!/bin/sh
+# usage: script/compile
+#
+# compile Grid Notation for publishing
+
+coffee -o . -c ./src/GridNotation.coffee
