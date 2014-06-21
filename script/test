@@ -1,0 +1,6 @@
+#!/bin/sh
+# usage: script/test
+#
+# Run tests
+
+mocha --compilers coffee:coffee-script/register --watch

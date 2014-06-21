@@ -1,0 +1,21 @@
+{
+  "name": "grid-notation",
+  "version": "0.0.1",
+  "description": "A written language to describe grids",
+  "engines": {
+    "node": "0.10",
+    "npm": "1.2"
+  },
+  "dependencies": {
+    "mocha": "^1.20.1",
+    "coffee-script": "^1.7.1"
+  },
+  "main": "lib/GridNotation.js",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/guideguide/grid-notation.git"
+  }
+}

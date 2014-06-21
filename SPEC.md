@@ -1,19 +1,16 @@
-# GuideGuide Notation
-
-GuideGuide’s grid form is a great tool, but it is somewhat limited in what it can do. To give you more flexibility with your grids, GuideGuide includes a feature called GuideGuide Notation, a special language that allows you to give instructions to GuideGuide, telling it where you would like to put guides within your document or selection.
+# Grid notation
 
 ## Grids
 
-> &lt;commands&gt; ( &lt;options&gt;, &lt;first offset&gt; | &lt;width&gt; | &lt;last offset&gt; )
+> &lt;commands&gt; [( [&lt;options&gt;][, &lt;first offset&gt; | &lt;width&gt; | &lt;last offset&gt; ])]
 
-A grid is a collection of guides and gaps across a single dimentional plane. GuideGuide will split the string into an array of guides and gaps and iterate through them, following them like instructions. Starting at 0, for each gap, GuideGuide will advance its insertion point by the value of the gap. When GuideGuide encounters a guide, it will place a guide at the current location of the insertion point. This will continue until all guides and gaps have been parsed.
+A grid is a collection of commands across a single dimensional plane. The parser will split the string into an array of guide and gaps commands and iterate through them, following them like instructions. Starting at 0, for each gap, the parser will advance its insertion point by the value of the gap. When the parser encounters a guide command, it will place a guide at the current location of the insertion point. This will continue until all guides and gaps have been parsed.
 
-GuideGuide takes into acount the size of the document or selection when calculating percentages, wildcards, and fills.
+The parser takes into account the size of the document or selection when calculating percentages, wildcards, and fills.
 
-Each guide or gap must be separated by a space character. Newlines are used to define multiple grids in one string.
+Each command must be separated by a space character. Newlines are used to define multiple grids in one string.
 
-It is possible to change the way GuideGuide renders the grid by specifiying options at the end of the grid, within parentheses. A width for the grid can be specified, as well as an offset to start rendering the grid. Whitespace in the options are is ignored.
-e.
+It is possible to change the way the parser renders the grid by specifying options at the end of the grid, within parentheses. A width for the grid can be specified, as well as left and right offsets to position the grid. Whitespace in the options are is ignored.
 
 #### Examples
 
@@ -48,7 +45,7 @@ e.
 
 > &lt;value&gt;&lt;unit&gt;
 
-Unit objects are value-unit pairs that indicate a measurement.
+Unit objects are value-unit pairs that indicate a measurement. The unit is required.
 
 #### Examples
 
@@ -62,17 +59,17 @@ Unit objects are value-unit pairs that indicate a measurement.
 
 ## Guides
 
-Guides are represented by a pipe `|`. These tell GuideGuide to place a guide at the current insertion point.
+Guides are represented by a pipe `|`. These tell the parser to place a guide at the current insertion point.
 
-## Gaps
+## Commands
 
-Gaps are unit objects or variables combined with multipliers to define spaces between gaps.
+Commands are unit objects or variables combined with multipliers to define spaces between guides.
 
-### Arbitrary gaps
+### Explicit commands
 
-> &lt;value&gt;&lt;unit&gt;*&lt;multiplier&gt;
+> &lt;value&gt;&lt;unit&gt;[*[&lt;multiplier&gt;]]
 
-An arbitrary gap is represented by a Unit Object and an optional multiplier. Arbitrary gaps are the width of the unit specified. Arbitrary can be positive or negative. Due to this, it is possible to traverse backwards and forwards.
+An explicit command is represented by a Unit Object and an optional multiplier. Explicit commands are the width of the unit specified. Explicit can be positive or negative. Due to this, it is possible to traverse backwards and forwards.
 
 #### Examples
 
@@ -80,16 +77,15 @@ An arbitrary gap is represented by a Unit Object and an optional multiplier. Arb
 
   `| 10px | 10px | 10px|`
 
-
 - one half inch column, one inch column, one half inch column
 
   `| .5in | 1in | .5in |`
 
-### Wildcard gaps
+### Wildcard commands
 
-A wildcard gap is represented by a tilde `~`. Any area within a grid that remains after all of the arbitrary gaps have been calculated will be evenly distributed amongst the wildcards present in a grid.
+> ~[*[&lt;multiplier&gt;]]
 
-Due to their flexible nature, wildcards can be used to position a grid. When a single wildcard is placed to the left of a GGN string, it will force the grid to render on the right side. Similarly, a GGN string with wildcards on either end will be centered.
+A wildcard command is represented by a tilde `~`. Any area within a grid that remains after all of the explicit commands have been calculated will be evenly distributed amongst the wildcards present in a grid.
 
 #### Examples
 
@@ -103,19 +99,19 @@ Due to their flexible nature, wildcards can be used to position a grid. When a s
 
 ### Variables
 
-Variables allow you to define and reuse collections of gaps within a grid. Variables are composed of a definition and a call.
+Variables allow you to define and reuse collections of guides and commands within a grid. Variables are composed of two parts: a definition and a call.
 
 #### Define
 
-> $&lt;id&gt; = &lt;gaps&gt;
+> $[&lt;id&gt;] = &lt;gaps&gt;
 
-A variable definition is represented by a dollar sign `$`, an optional id, an equals sign, and then a collection of gaps and guides separated by spaces.
+A variable definition is represented by a dollar sign `$`, an optional id, an equals sign, and then a collection of commands and guides separated by spaces.
 
 While it is possible to define a variable that contains no guides, this won't often be useful as the results of the variable will not be visible (since it contains no guides).
 
 #### Call
 
-> $&lt;id&gt;*&lt;multiplier&gt;
+> $[&lt;id&gt;][*[&lt;multiplier&gt;]]
 
 A variable call is represented by a dollar sign `$`, an optional id, and an optional multiplier. Anywhere a variable call occurs GuideGuide will replace its contents with the contents of its variable definition. A variable must be defined before it is called.
 
@@ -137,15 +133,15 @@ a three column grid
 
 ### Multiples and fills
 
-Arbitray, wildcard, and variable gaps can accept a final modifier that will duplicate that gap the number of times specified. These are most helpful when used with variables, as it is possible to specify both gaps and guide together. Multiples and fills can be specified on gaps, but since the result of the mutiplied gap is not visible, their usefulness is rare.
+Explicit, wildcard, and variable commands can accept a final modifier that will duplicate that command the number of times specified. These are most helpful when used with variables, as it is possible to specify both commands and guide together. Multiples and fills can be specified on non-guide commands, but since the result of the multiplied command is not visible, their usefulness is rare.
 
 #### Multiple
 
-A multiple is represented by an asterisk `*` followed by a number. The gap will be recreated sequentially the number of times specified by the multiple
+A multiple is represented by an asterisk `*` followed by a number. The command will be recreated sequentially the number of times specified by the multiple
 
 #### Examples
 
-- Two thirds column, one third column
+- Two thirds width column, one third width column
 
   `| ~*2 | ~ |`
 
@@ -158,7 +154,7 @@ A multiple is represented by an asterisk `*` followed by a number. The gap will 
 
 #### Fill
 
-A fill is represented by a asterisk `*` folowed by nothing and is a gap that will be recreated squentially until it fills the remaining space in the grid. This is useful for cases such as creating a baseline grid, or filling a space with as many columns and gutters of a certain width as will fit.
+A fill is represented by a asterisk `*` followed by nothing and is a gap that will be recreated sequentially until it fills the remaining space in the grid. This is useful for cases such as creating a baseline grid, or filling a space with as many columns and gutters of a certain width as will fit.
 
 - A sixteen pixel baseline grid
 
@@ -170,7 +166,7 @@ A fill is represented by a asterisk `*` folowed by nothing and is a gap that wil
 
 ## Grid Options
 
-> (&lt;modifiers&gt;,  &lt;adjustments&gt;)
+> ([&lt;modifiers&gt;][,  &lt;adjustments&gt;])
 
 Optional values to modify how the grid is created. They are wrapped in parens and broken into two sections separated by a comma.
 
@@ -191,19 +187,19 @@ Determines the orientation of the guides in the grid.
 
 ### Remainder pixel distribution
 
-Determines to which wildcards GuideGuide adds remainder pixels when the columns do not divide equally into the total width of the grid area.
+Determines to which wildcards the parser adds remainder pixels when the columns do not divide equally into the total width of the grid area. This setting is only used when "pixel" calculation is specified.
 
 #### Values:
 
-- `f`*(default)* first (left/top)
+- `f` first (left/top)
 
 - `c` center
 
-- `l` last (right/bottom)
+- `l` *(default)* last (right/bottom)
 
 ### Calculation
 
-Determines whether GuideGuide is strict about integers when calculating pixels
+Determines whether Parser is strict about integers when calculating pixels.
 
 #### Values:
 
@@ -213,11 +209,11 @@ Determines whether GuideGuide is strict about integers when calculating pixels
 
 ### Grid adjust
 
-> &lt;left offset&gt; | &lt;width&gt; | &lt;right offset&gt;
+> [&lt;left offset&gt;][ | &lt;width&gt; | ][ &lt;right offset&gt;]
 
-A string similar to Grid notation that specifies the left and right offsets and width of the grid, separated by pipes (which represent the edges of the grid).
+A string similar to grid notation that specifies the left and right offsets and width of the grid, separated by pipes (which represent the edges of the grid).
 
-Width is defined by enclosing a unit object in pipes. The tilde `~` can be used similarly to the way wildcards are used.
+Width is defined by enclosing a unit object in pipes. The tilde `~` is used similarly to the way wildcards are used.
 
 #### Examples:
 
@@ -241,7 +237,7 @@ Position works similarly to how CSS works. Think of the `~` as "auto". To define
   A one hundred pixel wide grid, twenty pixels from the left side (the right offset is ignored if a left and right offset is specified with a defined width).
 
 - `(v, 20px|~|20px)`  
-  A grid with a width that is 40px less than the width of the document, with 20px space on either side.
+  A grid with a (automaticlly calculated) width that is 40px less than the width of the document, with 20px space on either side.
 
 - `(v, ~|100px|)`  
   A right aligned, one hundred pixel wide grid.
@@ -249,7 +245,7 @@ Position works similarly to how CSS works. Think of the `~` as "auto". To define
 - `(v, ~|100px|~)`  
   A centered, one hundred pixel wide grid.
 
-For width to be specified, it **must** have a pipe on either side. If only one pipe between two values is specified, the values will be treated as left and right offsets. If a third pipe exists, it and anything after it is ignored.
+For width to be specified, it **must** have a pipe on either side. If only one pipe between two values is specified, the values will be treated as left and right offsets.
 
 #### Examples:
 
@@ -258,10 +254,36 @@ For width to be specified, it **must** have a pipe on either side. If only one p
 
 ## Errors
 
-GuideGuide String Notation errors will be denoted in curly brackets. Directly following a bracketed error will be a set of brackets containing a comma separated list of error IDs. Explanation of the errors will be printed below the grid.
+When cleaning a guide notation string, errors will be denoted in curly brackets. Directly following a bracketed error will be a set of brackets containing a comma separated list of error IDs.
 
 ```
 | 10px | { 10foo [1]} | 10px|
-
-# 1. Unrecognized unit type
 ```
+
+### Possible errors
+
+These scenarios will invalidate guide notation
+
+##### Error: 1 — Unrecognized command
+
+The parser does not understand the given command, or no unit was specified.
+
+##### Error: 2 — No grids
+
+A guide notation string must contain at least one grid.
+
+##### Error: 3 — Wildcards cannot be fills
+
+Because wildcards have no width of their own, trying to use them as a fill is dividing by zero.
+
+#### Error: 4 — Grids can only contain one fill
+
+Because fills are used to fill up all available space, it isn't possible to have more than one fill.
+
+##### Error: 5 — Variables cannot contain fills
+
+Because variables are intended for using multiple times, placing a fill in a variable would result in multiple fills. Technically this *should* be valid if the variable is only used once, however the logic to support this isn't worth supporting a case that technically shouldn't be used.
+
+##### Error: 6 — A variable must be defined
+
+If a variable has not been defined at the time it is called, it cannot be used.
