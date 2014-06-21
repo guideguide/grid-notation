@@ -68,18 +68,18 @@ describe 'Commands', ->
 
     it 'should parse guides', ->
       assert.deepEqual Command.parse("|"),
-        isValid: true
+        errors: []
         isGuide: true
 
     it 'should parse variables', ->
       assert.deepEqual Command.parse("$"),
-        isValid: true
+        errors: []
         isVariable: true
         isFill: false
         id: "$"
         multiplier: 1
       assert.deepEqual Command.parse("$foo*2"),
-        isValid: true
+        errors: []
         isVariable: true
         isFill: false
         id: "$foo"
@@ -87,19 +87,19 @@ describe 'Commands', ->
 
     it 'should parse wildcards', ->
       assert.deepEqual Command.parse("~"),
-        isValid: true
+        errors: []
         isWildcard: true
         isFill: false
         multiplier: 1
       assert.deepEqual Command.parse("~*2"),
-        isValid: true
+        errors: []
         isWildcard: true
         isFill: false
         multiplier: 2
 
     it 'should parse explicit', ->
       assert.deepEqual Command.parse("10px*2"),
-        isValid: true
+        errors: []
         isExplicit: true
         isFill: false
         isPercent: false
@@ -112,7 +112,7 @@ describe 'Commands', ->
 
     it 'should parse unknown', ->
       assert.deepEqual Command.parse("foo"),
-        isValid: false
+        errors: [1]
         string: "foo"
 
   describe 'Multiples', ->
@@ -148,18 +148,18 @@ describe 'Commands', ->
 
     it 'should convert guide commands to strings', ->
       assert.equal "|", Command.toString
-        isValid: true
+        errors: []
         isGuide: true
 
     it 'should convert variable commands to strings', ->
       assert.equal "$", Command.toString
-        isValid: true
+        errors: []
         isVariable: true
         isFill: false
         id: "$"
         multiplier: 1
       assert.equal "$foo*2", Command.toString
-        isValid: true
+        errors: []
         isVariable: true
         isFill: false
         id: "$foo"
@@ -167,19 +167,19 @@ describe 'Commands', ->
 
     it 'should convert wildcard commands to strings', ->
       assert.equal "~", Command.toString
-        isValid: true
+        errors: []
         isWildcard: true
         isFill: false
         multiplier: 1
       assert.equal "~*2", Command.toString
-        isValid: true
+        errors: []
         isWildcard: true
         isFill: false
         multiplier: 2
 
     it 'should convert explicit commands to strings', ->
       assert.equal "10px*2", Command.toString
-        isValid: true
+        errors: []
         isExplicit: true
         isFill: false
         isPercent: false
@@ -193,7 +193,7 @@ describe 'Commands', ->
     it 'should simplify strings', ->
       assert.equal "~", Command.toSimpleString("~*2")
       assert.equal "~", Command.toSimpleString
-        isValid: true
+        errors: []
         isWildcard: true
         isFill: false
         multiplier: 2

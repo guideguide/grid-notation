@@ -144,7 +144,7 @@ describe 'Grid Notation', ->
       assert.deepEqual GN.parseVariable("$ = |"),
         id: "$"
         commands: [
-          isValid: true
+          errors: []
           isGuide: true
         ]
 
@@ -160,25 +160,25 @@ describe 'Grid Notation', ->
       assert.strictEqual GN.parseCommands("").length, 0
 
     it 'should parse unknown commands', ->
-      assert.equal GN.parseCommands("foo")[0].isValid, false
+      assert GN.parseCommands("foo")[0].errors.length > 0
 
     it 'should parse guide commands', ->
-      assert GN.parseCommands("|")[0].isValid
+      assert GN.parseCommands("|")[0].errors.length is 0
 
     it 'should parse arbitrary commands', ->
-      assert GN.parseCommands("10px")[0].isValid
-      assert GN.parseCommands("10px*")[0].isValid
-      assert GN.parseCommands("10px*2")[0].isValid
+      assert GN.parseCommands("10px")[0].errors.length is 0
+      assert GN.parseCommands("10px*")[0].errors.length is 0
+      assert GN.parseCommands("10px*2")[0].errors.length is 0
 
     it 'should parse variable commands', ->
-      assert GN.parseCommands("$")[0].isValid
-      assert GN.parseCommands("$A*")[0].isValid
-      assert GN.parseCommands("$foo*2")[0].isValid
+      assert GN.parseCommands("$")[0].errors.length is 0
+      assert GN.parseCommands("$A*")[0].errors.length is 0
+      assert GN.parseCommands("$foo*2")[0].errors.length is 0
 
     it 'should parse wildcard commands', ->
-      assert GN.parseCommands("~")[0].isValid
-      assert GN.parseCommands("~*")[0].isValid is false
-      assert GN.parseCommands("~*2")[0].isValid
+      assert GN.parseCommands("~")[0].errors.length is 0
+      assert GN.parseCommands("~*")[0].errors.length > 0
+      assert GN.parseCommands("~*2")[0].errors.length is 0
 
   describe 'Parse options', ->
 
@@ -239,46 +239,46 @@ describe 'Grid Notation', ->
 
     it 'should reject fills in variables', ->
       obj = GN.objectify("$ = 10px*")
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject empty grids', ->
       obj = GN.objectify("")
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject fill variables containing wildcards', ->
       obj = GN.objectify """
       $ = ~
       $*
       """
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject undefined variables in variables', ->
       obj = GN.objectify "$ = $a"
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject undefined variables in grids', ->
       obj = GN.objectify """
       $ = 10px
       $a
       """
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject multiple fills in grids', ->
       obj = GN.objectify "|10px*|10px*|"
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject fills if a variable already contains one', ->
       obj = GN.objectify """
       $ = 10px*
       |10px*|
       """
-      assert.equal GN.validate(obj).isValid, false
+      assert GN.validate(obj).errors.length > 0
 
     it 'should reject bad alignment params', ->
-      assert GN.validate(GN.objectify("~ ( ~ | ~ | ~ )")).isValid
-      assert !GN.validate(GN.objectify("~ ( foo | ~ | ~ )")).isValid
-      assert !GN.validate(GN.objectify("~ ( ~ | foo | ~ )")).isValid
-      assert !GN.validate(GN.objectify("~ ( ~ | ~ | foo )")).isValid
+      assert GN.validate(GN.objectify("~ ( ~ | ~ | ~ )")).errors.length is 0
+      assert GN.validate(GN.objectify("~ ( foo | ~ | ~ )")).errors.length > 0
+      assert GN.validate(GN.objectify("~ ( ~ | foo | ~ )")).errors.length > 0
+      assert GN.validate(GN.objectify("~ ( ~ | ~ | foo )")).errors.length > 0
 
   describe 'Utilities', ->
 
@@ -287,18 +287,18 @@ describe 'Grid Notation', ->
 
     it 'should expand commands', ->
       given = [
-        isValid: true
+        errors: []
         isWildcard: true
         isFill: false
         multiplier: 2
       ]
       expected = [
-          isValid: true
+          errors: []
           isWildcard: true
           isFill: false
           multiplier: 1
         ,
-          isValid: true
+          errors: []
           isWildcard: true
           isFill: false
           multiplier: 1

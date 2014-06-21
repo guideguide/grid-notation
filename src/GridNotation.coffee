@@ -15,7 +15,7 @@ class GridNotation
     @cmd.unit = @unit
     guides = []
     tested = @validate(@objectify(string))
-    return null if !tested.isValid
+    return null if tested.errors.length > 0
 
     gn = tested.obj
     for key, variable of gn.variables
@@ -191,22 +191,23 @@ class GridNotation
   #
   # Returns an Object.
   validate: (obj) =>
-    isValid = if obj.grids.length > 0 then true else false
     variablesWithWildcards = {}
+    errors = []
+    error(2, errors) if obj.grids.length <= 0
 
     for key, commands of obj.variables
       for command in commands
-        isValid = false if command.isValid is false
+        error(command.errors, errors) if command.errors.length > 0
         id = command.id
         variable = obj.variables[id] if id
 
         # If an undefined variable is called, we can't do anything with it.
-        isValid = command.isValid = false if id and !variable
+        error(6, errors, command) if id and !variable
 
         # Fills are only meant to be used once, in one place. Including a fill
         # in a variable likely means it will be used in multiple places. In
         # theory this *could* be used once, but for now, let's just invalidate.
-        isValid = command.isValid = false if command.isFill
+        error(5, errors, command) if command.isFill
 
         variablesWithWildcards[key] = true if command.isWildcard
 
@@ -217,24 +218,24 @@ class GridNotation
       first  = grid.params.firstOffset
       width  = grid.params.width
       last   = grid.params.lastOffset
-      isValid = false if first and !first.isValid
-      isValid = false if width and !width.isValid
-      isValid = false if last and !last.isValid
+      error(1, errors) if first and first.errors.length > 0
+      error(1, errors) if width and width.errors.length > 0
+      error(1, errors) if last and last.errors.length > 0
 
       for command in grid.commands
-        isValid = false if command.isValid is false
+        error(command.errors, errors) if command.errors.length > 0
         id = command.id
         variable = obj.variables[id] if id
 
         # If an undefined variable is called, we can't do anything with it.
-        isValid = command.isValid = false if id and !variable
+        error(6, errors, command) if id and !variable
 
         # Since wildcards don't have an inherent value, it's impossible to
         # calculate a fill variable containing one.
         varHasWildcard = find(variable, (el) -> el.isWildcard).length > 0
 
-        if command.isFill and varHasWildcard
-          isValid = command.isValid = false
+        # Fill variables cannot contain wildcards
+        error(3, errors, command) if command.isFill and varHasWildcard
 
         fills++ if command.isFill
         varHasFill = find(variable, (el) -> el.isFill).length > 0
@@ -244,11 +245,10 @@ class GridNotation
           fills++
 
         # Fills can only be used once.
-        isValid = command.isValid = false if fills > 1
-        if id and variable and varHasFill
-          isValid = command.isValid = false
+        error(4, errors, command) if fills > 1
+        error(5, errors, command) if id and variable and varHasFill
 
-    isValid: isValid
+    errors: errors
     obj: obj
 
   # Convert a string of command and guide commands into an object.
@@ -319,7 +319,7 @@ class GridNotation
     return true if string.indexOf("|") >= 0 # it has pipes
     commands = @parseCommands string
     return true if commands.length > 1 # it has multiple commands
-    return true if commands[0].isValid # it has a valid first command
+    return true if commands[0].errors.length is 0 # it has a valid first command
     false
 
   # Convert a grid string into an object.
@@ -569,29 +569,29 @@ class Command
   parse: (string = "") ->
     string = string.replace /\s/g, ''
     if @isGuide string
-      isValid: true
+      errors: []
       isGuide: true
     else if @isVariable string
       bits = @variableRegexp.exec string
-      isValid: true
+      errors: []
       isVariable: true
       isFill: @isFill string
       id: if bits[1] then "$#{ bits[1] }" else "$"
       multiplier: @count string
     else if @isExplicit string
-      isValid: true
+      errors: []
       isExplicit: true
       isPercent: @isPercent string
       isFill: @isFill string
       unit: @unit.parse(string)
       multiplier: @count string
     else if @isWildcard string
-      isValid: if @isFill(string) then false else true
+      errors: if @isFill(string) then [3] else []
       isWildcard: true
       isFill: @isFill string
       multiplier: @count string
     else
-      isValid: false
+      errors: [1]
       string: string
 
   # Output a command as a string. If it is unrecognized, format it properly.
@@ -619,7 +619,7 @@ class Command
       string += '*' if command.isFill or command.multiplier > 1
       string += command.multiplier if command.multiplier > 1
 
-    if command.isValid then string else "{#{ string }}"
+    if command.errors.length is 0 then string else "{#{ string }}"
 
   # Create a command string without a multiplier
   #
@@ -756,6 +756,23 @@ lengthOf = (command, variables) ->
     sum += command.unit.value
   sum
 
+# Assign an error code to a command and a master list
+#
+#   code    - error code to assign
+#   master  - the master error array
+#   command - the command that caused the error
+#
+# Returns nothing.
+error = (codes, master, command) ->
+  codes = [codes] if typeof codes is "number"
+  for code in codes
+    exists = find(master, ((e, i) -> true if e is code)).length > 0
+    master.push code if !exists
+    return unless command
+    command.errors ||= []
+    command.isValid = false
+    exists = find(command.errors, ((e, i) -> true if e is code)).length > 0
+    command.errors.push code if !exists
 
 if (typeof module != 'undefined' && typeof module.exports != 'undefined')
   module.exports =
