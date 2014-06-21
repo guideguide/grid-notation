@@ -42,7 +42,7 @@ describe 'Grid Notation', ->
     it 'should detect fills in variables', ->
       assert.equal GN.clean("$=|10px*|"), "$ = | {10px* [5]} |"
 
-    it.only 'should detect bad adjustments', ->
+    it 'should detect bad adjustments', ->
       assert.equal GN.clean("|~|(hl,foo|~|~)"), "| ~ | ( hl, {foo [1]} | ~ | ~ )"
 
     it 'should detect undefined variables in variables', ->
