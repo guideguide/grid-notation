@@ -173,6 +173,97 @@ class GridNotation
 
     trim string.replace(/\n\n\n+/g, "\n")
 
+
+  # Convert an object of grid inputs into a grid notation string.
+  #
+  #   grid - Object to stringify.
+  #     count          - int, string int: number of columns/rows
+  #     width          - unit pair string: width of column/row
+  #     gutter         - unit pair string: width of gutter
+  #     firstMargin    - unit pair string: left/top margin
+  #     lastMargin     - unit pair string: right/bottom margin
+  #     columnMidpoint - true, false: split the columns/rows in two
+  #     gutterMidpoint - true, false: split the gutters in two
+  #     orientation    - h, v
+  #     position       - first, center, last
+  #     remainder      - first, center, last
+  #
+  # Returns a String.
+  stringify: (data) =>
+    data ||= {}
+    data.count            = parseInt data.count
+    data.width          ||= ''
+    data.gutter         ||= ''
+    data.firstMargin    ||= ''
+    data.lastMargin     ||= ''
+    data.columnMidpoint ||= false
+    data.gutterMidpoint ||= false
+    data.orientation    ||= 'v'
+    data.position       ||= 'f'
+    data.remainder      ||= 'l'
+    data.calculation    ||= ''
+    firstMargString       = ''
+    varString             = ''
+    gridString            = ''
+    lastMargString        = ''
+    optionsString         = ''
+
+    # Set up the margins, if they exist
+    firstMargString = '|' + data.firstMargin.replace(/,|\s+/g,' ').split(' ').join('|') + '|' if data.firstMargin
+    lastMargString  = '|' + data.lastMargin.replace(/,|\s+/g,' ').split(' ').reverse().join('|') + '|' if data.lastMargin
+
+    # Set up the columns and gutters variables, if they exist
+    if data.count or data.width
+      column = if data.width then data.width else '~'
+      if data.columnMidpoint
+
+        unit   = @unit.parse(data.width) if data.width
+        column = if data.width then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
+
+      varString += "$#{ data.orientation } = |#{ column }|\n"
+
+      if data.gutter and data.count != 1
+        gutter = if data.gutter then data.gutter else '~'
+        if data.gutterMidpoint
+          unit   = @unit.parse(data.gutter) if data.gutter
+          gutter = if data.gutter then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
+
+        varString  = "$#{ data.orientation } = |#{ column }|#{ gutter }|\n"
+        varString += "$#{ data.orientation }C = |#{ column }|\n" if data.count
+
+    # Set up the grid string
+    if data.count or data.width
+      gridString += "|$#{ data.orientation }"
+      gridString += "*" if data.count != 1
+      gridString += data.count - 1 if data.count > 1 and data.gutter
+      gridString += data.count if data.count > 1 and !data.gutter
+      gridString += "|"
+      gridString += "|$#{ data.orientation }#{ if data.gutter then 'C' else '' }|" if data.count > 1 and data.gutter
+
+    if (!data.count and !data.width) and data.firstMargin
+      gridString += "|"
+
+    if (!data.count and !data.width) and (data.firstMargin or data.lastMargin)
+      gridString += "~"
+
+    if (!data.count and !data.width) and data.lastMargin
+      gridString += "|"
+
+    if data.firstMargin or data.lastMargin or data.count or data.width
+      # Set up the options
+      optionsString += " ( "
+      optionsString += data.orientation
+      optionsString += data.remainder
+      optionsString += "p" if data.calculation == "p"
+      optionsString += ", "
+      optionsString += "~" if data.position is "l" or data.position is "c"
+      optionsString += "|"
+      optionsString += "~" if data.position is "f" or data.position is "c"
+      optionsString += " )"
+
+    # Bring it all together
+    @pipeCleaner "#{ varString }#{ firstMargString }#{ gridString }#{ lastMargString }#{ optionsString }".replace(/\|+/g, "|")
+
   # Test if a GridNotation string is valid.
   #
   #   string = GridNotation to test
@@ -433,7 +524,7 @@ class GridNotation
     string
       .replace(/[^\S\n]*\|[^\S\n]*/g, '|') # Normalize spaces
       .replace(/\|+/g, ' | ')              # Duplicate pipes
-      .replace(/^\s+|\s+$/g, '')           # Leading and trailing whitespace
+      .replace(/^\s+|\s+$/gm, '')          # Leading and trailing whitespace
 
   # Convert a command array into a guide notation spec compliant string.
   #
