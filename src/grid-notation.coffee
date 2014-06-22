@@ -257,13 +257,8 @@ class GridNotation
       optionsString += "p" if data.calculation == "pixel"
       optionsString += " )"
 
-    leftBuffer = rightBuffer = ""
-    if data.width
-      leftBuffer = "~" if data.position == "last" or data.position == "center"
-      rightBuffer = "~" if data.position == "first" or data.position == "center"
-
     # Bring it all together
-    @pipeCleaner "#{ varString }#{ firstMargString }#{ leftBuffer }#{ gridString }#{ rightBuffer }#{ lastMargString }#{ optionsString }".replace(/\|+/g, "|")
+    @pipeCleaner "#{ varString }#{ firstMargString }#{ gridString }#{ lastMargString }#{ optionsString }".replace(/\|+/g, "|")
 
   # Test if a GridNotation string is valid.
   #
