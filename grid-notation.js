@@ -17,6 +17,7 @@
       this.validate = __bind(this.validate, this);
       this.objectify = __bind(this.objectify, this);
       this.test = __bind(this.test, this);
+      this.stringify = __bind(this.stringify, this);
       this.clean = __bind(this.clean, this);
       this.unit = new Unit();
       this.cmd = new Command();
@@ -229,6 +230,99 @@
         string += "" + (trim(line)) + "\n";
       }
       return trim(string.replace(/\n\n\n+/g, "\n"));
+    };
+
+    GridNotation.prototype.stringify = function(data) {
+      var column, firstMargString, gridString, gutter, lastMargString, optionsString, unit, varString;
+      data || (data = {});
+      data.count = parseInt(data.count);
+      data.width || (data.width = '');
+      data.gutter || (data.gutter = '');
+      data.firstMargin || (data.firstMargin = '');
+      data.lastMargin || (data.lastMargin = '');
+      data.columnMidpoint || (data.columnMidpoint = false);
+      data.gutterMidpoint || (data.gutterMidpoint = false);
+      data.orientation || (data.orientation = 'v');
+      data.position || (data.position = 'f');
+      data.remainder || (data.remainder = 'l');
+      data.calculation || (data.calculation = '');
+      firstMargString = '';
+      varString = '';
+      gridString = '';
+      lastMargString = '';
+      optionsString = '';
+      if (data.firstMargin) {
+        firstMargString = '|' + data.firstMargin.replace(/,|\s+/g, ' ').split(' ').join('|') + '|';
+      }
+      if (data.lastMargin) {
+        lastMargString = '|' + data.lastMargin.replace(/,|\s+/g, ' ').split(' ').reverse().join('|') + '|';
+      }
+      if (data.count || data.width) {
+        column = data.width ? data.width : '~';
+        if (data.columnMidpoint) {
+          if (data.width) {
+            unit = this.unit.parse(data.width);
+          }
+          column = data.width ? "" + (unit.value / 2) + unit.type + "|" + (unit.value / 2) + unit.type : "~|~";
+        }
+        varString += "$" + data.orientation + " = |" + column + "|\n";
+        if (data.gutter && data.count !== 1) {
+          gutter = data.gutter ? data.gutter : '~';
+          if (data.gutterMidpoint) {
+            if (data.gutter) {
+              unit = this.unit.parse(data.gutter);
+            }
+            gutter = data.gutter ? "" + (unit.value / 2) + unit.type + "|" + (unit.value / 2) + unit.type : "~|~";
+          }
+          varString = "$" + data.orientation + " = |" + column + "|" + gutter + "|\n";
+          if (data.count) {
+            varString += "$" + data.orientation + "C = |" + column + "|\n";
+          }
+        }
+      }
+      if (data.count || data.width) {
+        gridString += "|$" + data.orientation;
+        if (data.count !== 1) {
+          gridString += "*";
+        }
+        if (data.count > 1 && data.gutter) {
+          gridString += data.count - 1;
+        }
+        if (data.count > 1 && !data.gutter) {
+          gridString += data.count;
+        }
+        gridString += "|";
+        if (data.count > 1 && data.gutter) {
+          gridString += "|$" + data.orientation + (data.gutter ? 'C' : '') + "|";
+        }
+      }
+      if ((!data.count && !data.width) && data.firstMargin) {
+        gridString += "|";
+      }
+      if ((!data.count && !data.width) && (data.firstMargin || data.lastMargin)) {
+        gridString += "~";
+      }
+      if ((!data.count && !data.width) && data.lastMargin) {
+        gridString += "|";
+      }
+      if (data.firstMargin || data.lastMargin || data.count || data.width) {
+        optionsString += " ( ";
+        optionsString += data.orientation;
+        optionsString += data.remainder;
+        if (data.calculation === "p") {
+          optionsString += "p";
+        }
+        optionsString += ", ";
+        if (data.position === "l" || data.position === "c") {
+          optionsString += "~";
+        }
+        optionsString += "|";
+        if (data.position === "f" || data.position === "c") {
+          optionsString += "~";
+        }
+        optionsString += " )";
+      }
+      return this.pipeCleaner(("" + varString + firstMargString + gridString + lastMargString + optionsString).replace(/\|+/g, "|"));
     };
 
     GridNotation.prototype.test = function(string) {
@@ -567,7 +661,7 @@
       if (string == null) {
         string = "";
       }
-      return string.replace(/[^\S\n]*\|[^\S\n]*/g, '|').replace(/\|+/g, ' | ').replace(/^\s+|\s+$/g, '');
+      return string.replace(/[^\S\n]*\|[^\S\n]*/g, '|').replace(/\|+/g, ' | ').replace(/^\s+|\s+$/gm, '');
     };
 
     GridNotation.prototype.stringifyCommands = function(commands) {
