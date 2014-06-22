@@ -551,9 +551,10 @@ class GridNotation
       string += ", " if string.length > 0
 
     string += @cmd.stringify(params.firstOffset) if params.firstOffset
-    string += "|#{ @cmd.stringify(params.width) }|" if params.width
-    string += "|" if params.firstOffset and params.lastOffset and !params.width
-    string += @cmd.stringify(params.lastOffset) if params.firstOffset
+    string += "|" if params.firstOffset or params.width
+    string += "#{ @cmd.stringify(params.width) }" if params.width
+    string += "|" if params.lastOffset or params.width
+    string += @cmd.stringify(params.lastOffset) if params.lastOffset
 
     if string then "( #{ @pipeCleaner(string) } )" else ''
 

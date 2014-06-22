@@ -306,11 +306,33 @@ describe 'Grid Notation', ->
       assert.equal GN.stringifyCommands(GN.parseCommands("|10px|")), "| 10px |"
       assert.equal GN.stringifyCommands(GN.parseCommands("|foo|")), "| {foo [1]} |"
 
-    it 'should stringify params', ->
-      gn = GN.parseGrid "|~|(vl, ~|~|~)"
-      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | ~ | ~ )"
+    it 'should stringify params with no adjustments', ->
       gn = GN.parseGrid "|~|(v)"
       assert.equal GN.stringifyParams(gn.params), "( vl )"
+
+    it 'should stringify all adjustments', ->
+      gn = GN.parseGrid "|~|(vl, ~|~|~)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | ~ | ~ )"
+
+    it 'should stringify left adjustments', ->
+      gn = GN.parseGrid "|~|(vl, ~|)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | )"
+
+    it 'should stringify right adjustments', ->
+      gn = GN.parseGrid "|~|(vl, |~)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, | ~ )"
+
+    it 'should stringify left and right adjustments', ->
+      gn = GN.parseGrid "|~|(vl, ~|~)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | ~ )"
+
+    it 'should stringify left adjustment with width', ->
+      gn = GN.parseGrid "|~|(vl, ~|~|)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | ~ | )"
+
+    it 'should stringify right adjustment with width', ->
+      gn = GN.parseGrid "|~|(vl, |~|~)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, | ~ | ~ )"
 
   describe '.stringify()', ->
 
