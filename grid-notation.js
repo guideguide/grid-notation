@@ -688,13 +688,16 @@
       if (params.firstOffset) {
         string += this.cmd.stringify(params.firstOffset);
       }
-      if (params.width) {
-        string += "|" + (this.cmd.stringify(params.width)) + "|";
-      }
-      if (params.firstOffset && params.lastOffset && !params.width) {
+      if (params.firstOffset || params.width) {
         string += "|";
       }
-      if (params.firstOffset) {
+      if (params.width) {
+        string += "" + (this.cmd.stringify(params.width));
+      }
+      if (params.lastOffset || params.width) {
+        string += "|";
+      }
+      if (params.lastOffset) {
         string += this.cmd.stringify(params.lastOffset);
       }
       if (string) {
