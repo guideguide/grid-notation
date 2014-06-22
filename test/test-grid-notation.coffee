@@ -316,19 +316,142 @@ describe 'Grid Notation', ->
 
     it 'should stringify first margin', ->
       string = """
-        | 10px | ~ ( vl )
+        | 10px | ~ ( vl, | ~ )
       """
       assert.equal GN.stringify(firstMargin: "10px"), string
 
+    it 'should stringify multiple first margins', ->
+      string = """
+        | 10px | 20px | ~ ( vl, | ~ )
+      """
+      assert.equal GN.stringify(firstMargin: "10px 20px"), string
+
     it 'should stringify last margin', ->
       string = """
-        ~ | 10px | ( vl )
+        ~ | 10px | ( vl, | ~ )
       """
       assert.equal GN.stringify(lastMargin: "10px"), string
+
+    it 'should stringify multiple last margins', ->
+      string = """
+        ~ | 20px | 10px | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(lastMargin: "10px 20px"), string
+
+    it 'should stringify first and last margins', ->
+      string = """
+        | 10px | ~ | 10px | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(firstMargin: "10px", lastMargin: "10px"), string
 
     it 'should stringify count', ->
       string = """
         $v = | ~ |
-        | $v*3 | ( vl )
+        | $v*3 | ( vl, | ~ )
       """
       assert.equal GN.stringify(count: "3"), string
+
+    it 'should stringify count with margins', ->
+      data = count: "3", firstMargin: "10px", lastMargin: "10px"
+      string = """
+        $v = | ~ |
+        | 10px | $v*3 | 10px | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should not stringify gutter by itself', ->
+      assert.equal GN.stringify(gutter: "10px"), ""
+
+    it 'should stringify gutter and count', ->
+      string = """
+        $v = | ~ | 10px |
+        $vC = | ~ |
+        | $v*2 | $vC | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(count: "3", gutter: "10px"), string
+
+    it 'should stringify width', ->
+      string = """
+        $v = | 10px |
+        | $v* | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(width: "10px"), string
+
+    it 'should stringify count and width', ->
+      string = """
+        $v = | 10px |
+        | $v*3 | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(count: "3", width: "10px"), string
+
+    it 'should not stringify only column midpoint', ->
+      assert.equal GN.stringify(columnMidpoint: true), ""
+
+    it 'should not stringify only gutter midpoint', ->
+      assert.equal GN.stringify(gutterMidpoint: true), ""
+
+    it 'should stringify column midpoint with count', ->
+      string = """
+        $v = | ~ | ~ |
+        | $v*3 | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(count: "3", columnMidpoint: true), string
+
+    it 'should stringify column midpoint with count and width', ->
+      data = count: "3", width: "10px", columnMidpoint: true
+      string = """
+        $v = | 5px | 5px |
+        | $v*3 | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should stringify gutter midpoint with count and gutter', ->
+      data = count: "3", gutter: "10px", gutterMidpoint: true
+      string = """
+        $v = | ~ | 5px | 5px |
+        $vC = | ~ |
+        | $v*2 | $vC | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should not stringify gutter midpoint with count and no gutter', ->
+      data = count: "3", gutterMidpoint: true
+      string = """
+        $v = | ~ |
+        | $v*3 | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should stringify centered grids', ->
+      data = count: "3", width: "10px", position: "c"
+      string = """
+        $v = | 10px |
+        | $v*3 | ( vl, ~ | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should stringify right aligned grids', ->
+      data = count: "3", width: "10px", position: "l"
+      string = """
+        $v = | 10px |
+        | $v*3 | ( vl, ~ | )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should stringify pixel calculation', ->
+      string = """
+        | 10px | ~ ( vlp, | ~ )
+      """
+      assert.equal GN.stringify(firstMargin: "10px", calculation: "p"), string
+
+    it 'should stringify first remainder', ->
+      string = """
+        | 10px | ~ ( vf, | ~ )
+      """
+      assert.equal GN.stringify(firstMargin: "10px", remainder: "f"), string
+
+    it 'should stringify center remainder', ->
+      string = """
+        | 10px | ~ ( vc, | ~ )
+      """
+      assert.equal GN.stringify(firstMargin: "10px", remainder: "c"), string
