@@ -121,7 +121,7 @@ describe 'Grid Notation', ->
       assert GN.test("|10px|")
 
     it 'should fail for bad grid notation', ->
-      assert GN.test("|foo|") is false
+      assert GN.test("|foo|").length > 0
 
   describe "Objectification", ->
 

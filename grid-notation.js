@@ -326,7 +326,7 @@
     };
 
     GridNotation.prototype.test = function(string) {
-      return this.validate(this.objectify(string)).errors.length === 0;
+      return this.validate(this.objectify(string)).errors;
     };
 
     GridNotation.prototype.objectify = function(string) {

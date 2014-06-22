@@ -264,13 +264,13 @@ class GridNotation
     # Bring it all together
     @pipeCleaner "#{ varString }#{ firstMargString }#{ gridString }#{ lastMargString }#{ optionsString }".replace(/\|+/g, "|")
 
-  # Test if a GridNotation string is valid.
+  # Return an array of errors that exist in a grid notation string.
   #
-  #   string = GridNotation to test
+  #   string - string to test
   #
-  # Returns a Boolean.
+  # Returns an Array.
   test: (string) =>
-    @validate(@objectify(string)).errors.length is 0
+    @validate(@objectify(string)).errors
 
   # Create an object of grid data from a grid notation string
   #
