@@ -31,7 +31,11 @@ class GridNotation
       offset           = if guideOrientation == 'h' then info.offsetY else info.offsetX
       stretchDivisions = 0
       adjustRemainder  = 0
-      wildcards        = find grid.commands, (el) -> el.isWildcard
+
+      # Expand any fills or variables
+      grid.commands = @expandCommands grid.commands, gn.variables
+
+      wildcards = find grid.commands, (el) -> el.isWildcard
 
       # Measure explicit commands
       explicit = find grid.commands, (el) -> el.isExplicit and !el.isFill
@@ -83,6 +87,14 @@ class GridNotation
 
         wildcardArea -= fillWidth
 
+        newCommands = []
+        for command, i in grid.commands
+          if command.isFill
+            newCommands = newCommands.concat fillCollection
+          else
+            newCommands.push command
+        grid.commands = [].concat newCommands
+
       # Set the width of any wildcards
       if wildcardArea and wildcards
         wildcardWidth = wildcardArea/wildcards.length
@@ -114,12 +126,6 @@ class GridNotation
       # Figure out where the grid starts
       insertMarker = grid.params.firstOffset?.unit.base
       insertMarker ||= offset
-
-      # Expand any fills or variables
-      expandOpts =
-        variables: gn.variables
-        fillCollection: fillCollection
-      grid.commands = @expandCommands grid.commands, expandOpts
 
       # Set value of percent commands
       percents = find grid.commands, (el) -> el.isPercent
@@ -274,48 +280,49 @@ class GridNotation
 
   # Take an array of commands and apply any multiples
   #
-  #   array - array of commands
-  #   args  - arguments to influence expansion
-  #     variables      - if present, variables will be expanded
-  #     fillCollection - if present, fills will be expanded
+  #   array     - array of commands
+  #   variables - variables for expanding
   #
   # Returns an Array
-  expandCommands: (commands = [], args = {}) ->
+  expandCommands: (commands = [], variables = {}) ->
+    commands = @parseCommands commands if typeof commands is "string"
+    reparse = true
+
+    while reparse is true
+      reparse = false
+      # Expand any multipliers
+      newCommands = []
+      for command in commands
+        if command.isFill
+          newCommands.push command
+        else
+          loops = command.multiplier || 1
+          for i in [0...loops] by 1
+            newCommands.push @cmd.parse(@cmd.toSimpleString(command))
+      commands = [].concat newCommands
+
+      # Apply any variables
+      newCommands = []
+      for command, i in commands
+        if command.isVariable and variables and variables[command.id]
+          reparse = true
+          newCommands = newCommands.concat(variables[command.id])
+        else
+          newCommands.push command
+      commands = [].concat newCommands
+
+      # Remove dupe guides
+      newCommands = []
+      for command, i in commands
+        if !command.isGuide or (command.isGuide and !commands[i-1]?.isGuide)
+          newCommands.push command
+      commands = [].concat newCommands
+
+    commands
+
+  expandVariables: (commands = [], variables ={}) =>
     commands = @parseCommands commands if typeof commands is "string"
 
-    # Expand fills
-    newCommands = []
-    for command, i in commands
-      if args.fillCollection and command.isFill
-        newCommands = newCommands.concat args.fillCollection
-      else
-        newCommands.push command
-    commands = [].concat newCommands
-
-    # Apply any variables
-    newCommands = []
-    for command, i in commands
-      if command.isVariable and args.variables and args.variables[command.id]
-        newCommands = newCommands.concat(args.variables[command.id])
-      else
-        newCommands.push command
-    commands = [].concat newCommands
-
-    # Expand any multipliers
-    newCommands = []
-    for command in commands
-      loops = command.multiplier || 1
-      for i in [0...loops] by 1
-        newCommands.push @cmd.parse(@cmd.toSimpleString(command))
-    commands = [].concat newCommands
-
-    # Remove dupe guides
-    newCommands = []
-    for command, i in commands
-      if !command.isGuide or (command.isGuide and !commands[i-1]?.isGuide)
-        newCommands.push command
-
-    newCommands
 
   # Look into a string to see if it contains commands
   #

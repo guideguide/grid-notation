@@ -125,6 +125,17 @@ describe 'Math', ->
         { location: 20, orientation: "h" }
       ]
 
+    it 'should work with a three column grid', ->
+      assert.deepEqual GN.parse("""
+        $v=|~|
+        |$v*3|(vlp)
+      """, info), [
+        { location: 0, orientation: "v" }
+        { location: 33, orientation: "v" }
+        { location: 66, orientation: "v" }
+        { location: 100, orientation: "v" }
+      ]
+
   describe 'multiples', ->
 
     it 'should work with arbitrary multiples', ->
@@ -147,6 +158,16 @@ describe 'Math', ->
         $* |
       """, info), [
         { location: 100, orientation: "h" }
+      ]
+
+    it 'should parse cascading multiples', ->
+      assert.deepEqual GN.parse("""
+        $ = 10px
+        $a = $*3
+        | $a*3 |
+      """, info), [
+        { location: 0, orientation: "h" }
+        { location: 90, orientation: "h" }
       ]
 
     describe 'adjustments', ->
