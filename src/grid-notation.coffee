@@ -433,7 +433,7 @@ class GridNotation
     string
       .replace(/[^\S\n]*\|[^\S\n]*/g, '|') # Normalize spaces
       .replace(/\|+/g, ' | ')              # Duplicate pipes
-      .replace(/^\s+|\s+$/g, '')           # Leading and trailing whitespace
+      .replace(/^\s+|\s+$/gm, '')          # Leading and trailing whitespace
 
   # Convert a command array into a guide notation spec compliant string.
   #
