@@ -254,7 +254,11 @@ class GridNotation
       optionsString += " ( "
       optionsString += data.orientation
       optionsString += data.remainder
-      optionsString += "p" if data.calculation == "pixel"
+      optionsString += "p" if data.calculation == "p"
+      optionsString += ", "
+      optionsString += "~" if data.position is "l" or data.position is "c"
+      optionsString += "|"
+      optionsString += "~" if data.position is "f" or data.position is "c"
       optionsString += " )"
 
     # Bring it all together
