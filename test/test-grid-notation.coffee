@@ -9,7 +9,7 @@ Command = GridNotation.command
 
 describe 'Grid Notation', ->
 
-  describe "Cleaning", ->
+  describe ".clean()", ->
 
     it 'should clean successfully', ->
       gn = """
@@ -87,7 +87,7 @@ describe 'Grid Notation', ->
       """
       assert.equal GN.clean(gn), expected
 
-  describe "Parsing", ->
+  describe ".parse()", ->
 
     info =
       hasOpenDocuments: true
