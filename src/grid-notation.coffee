@@ -220,7 +220,7 @@ class GridNotation
         unit   = @unit.parse(data.width) if data.width
         column = if data.width then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
 
-      varString += "$#{ data.orientation } =|#{ column }|\n"
+      varString += "$#{ data.orientation } = |#{ column }|\n"
 
       if data.gutter and data.count != 1
         gutter = if data.gutter then data.gutter else '~'
@@ -228,8 +228,8 @@ class GridNotation
           unit   = @unit.parse(data.gutter) if data.gutter
           gutter = if data.gutter then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
 
-        varString  = "$#{ data.orientation }=|#{ column }|#{ gutter }|\n"
-        varString += "$#{ data.orientation }C=|#{ column }|\n" if data.count
+        varString  = "$#{ data.orientation } = |#{ column }|#{ gutter }|\n"
+        varString += "$#{ data.orientation }C = |#{ column }|\n" if data.count
 
     # Set up the grid string
     if data.count or data.width
