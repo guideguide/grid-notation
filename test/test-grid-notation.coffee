@@ -128,18 +128,6 @@ describe 'Grid Notation', ->
     it 'should objectify', ->
       assert.equal GN.objectify("|$|~|foo| (10px|~|10px)").grids.length, 1
 
-  describe 'Stringification', ->
-
-    it 'should stringify command strings', ->
-      assert.equal GN.stringifyCommands(GN.parseCommands("|10px|")), "| 10px |"
-      assert.equal GN.stringifyCommands(GN.parseCommands("|foo|")), "| {foo [1]} |"
-
-    it 'should stringify params', ->
-      gn = GN.parseGrid "|~|(vl, ~|~|~)"
-      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | ~ | ~ )"
-      gn = GN.parseGrid "|~|(v)"
-      assert.equal GN.stringifyParams(gn.params), "( vl )"
-
   describe 'Parse grid', ->
 
     it 'should parse grids', ->
@@ -313,3 +301,34 @@ describe 'Grid Notation', ->
       ]
 
       assert.deepEqual GN.expandCommands(given), expected
+
+    it 'should stringify command strings', ->
+      assert.equal GN.stringifyCommands(GN.parseCommands("|10px|")), "| 10px |"
+      assert.equal GN.stringifyCommands(GN.parseCommands("|foo|")), "| {foo [1]} |"
+
+    it 'should stringify params', ->
+      gn = GN.parseGrid "|~|(vl, ~|~|~)"
+      assert.equal GN.stringifyParams(gn.params), "( vl, ~ | ~ | ~ )"
+      gn = GN.parseGrid "|~|(v)"
+      assert.equal GN.stringifyParams(gn.params), "( vl )"
+
+  describe '.stringify()', ->
+
+    it 'should stringify first margin', ->
+      string = """
+        | 10px | ~ ( vl )
+      """
+      assert.equal GN.stringify(firstMargin: "10px"), string
+
+    it 'should stringify last margin', ->
+      string = """
+        ~ | 10px | ( vl )
+      """
+      assert.equal GN.stringify(lastMargin: "10px"), string
+
+    it 'should stringify count', ->
+      string = """
+        $v = | ~ |
+        | $v*3 | ( vl )
+      """
+      assert.equal GN.stringify(count: "3"), string
