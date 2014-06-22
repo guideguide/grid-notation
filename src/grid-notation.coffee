@@ -4,9 +4,9 @@ class GridNotation
     @unit = new Unit()
     @cmd = new Command()
 
-  # Convert a GridNotation string into an array of guides.
+  # Convert a grid notation string into an array of guides.
   #
-  #   string - GridNotation string to parse
+  #   string - string to parse
   #   info   - information about the document
   #
   # Returns an Array.
@@ -151,7 +151,7 @@ class GridNotation
 
     guides
 
-  # Format a GridNotation string according to spec.
+  # Format a grid notation string according to spec.
   #
   #   string - string to format
   #
@@ -272,7 +272,7 @@ class GridNotation
   test: (string) =>
     @validate(@objectify(string)).errors.length is 0
 
-  # Create an object of grid data from a Guide Notation String
+  # Create an object of grid data from a grid notation string
   #
   #   string - string to parse
   #
@@ -296,10 +296,10 @@ class GridNotation
     variables: variables
     grids: grids
 
-  # Process a guide notation object looking for errors. If any exist, mark them
+  # Process a grid notation object looking for errors. If any exist, mark them
   # and return the results.
   #
-  #   obj - guide notation object
+  #   obj - grid notation object
   #
   # Returns an Object.
   validate: (obj) =>
@@ -526,7 +526,7 @@ class GridNotation
       .replace(/\|+/g, ' | ')              # Duplicate pipes
       .replace(/^\s+|\s+$/gm, '')          # Leading and trailing whitespace
 
-  # Convert a command array into a guide notation spec compliant string.
+  # Convert a command array into a grid notation spec compliant string.
   #
   #   commands - command array
   #
@@ -848,7 +848,7 @@ find = (arr, iterator) ->
 # Get the total length of the given command.
 #
 #   command   - command to be measured
-#   variables - variables from the guide notation
+#   variables - variables from the grid notation
 #
 # Returns a Number.
 lengthOf = (command, variables) ->
