@@ -154,9 +154,10 @@ describe 'Math', ->
 
     it 'should work with variable fills', ->
       assert.deepEqual GN.parse("""
-        $ = 10px
+        $ = 50px |
         $* |
       """, info), [
+        { location: 50, orientation: "h" }
         { location: 100, orientation: "h" }
       ]
 

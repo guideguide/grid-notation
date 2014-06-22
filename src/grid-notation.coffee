@@ -134,6 +134,13 @@ class GridNotation
         percentValue = Math.floor(percentValue) if wholePixels
         command.unit = @unit.parse("#{ percentValue }px")
 
+      # Remove dupe guides
+      newCommands = []
+      for command, i in grid.commands
+        if !command.isGuide or (command.isGuide and !grid.commands[i-1]?.isGuide)
+          newCommands.push command
+      grid.commands = [].concat newCommands
+
       for command in grid.commands
         if command.isGuide
           guides.push
@@ -287,6 +294,7 @@ class GridNotation
   expandCommands: (commands = [], variables = {}) ->
     commands = @parseCommands commands if typeof commands is "string"
     reparse = true
+    varWidths = {}
 
     while reparse is true
       reparse = false
@@ -304,25 +312,14 @@ class GridNotation
       # Apply any variables
       newCommands = []
       for command, i in commands
-        if command.isVariable and variables and variables[command.id]
+        if command.isVariable and variables and variables[command.id] and !command.isFill
           reparse = true
           newCommands = newCommands.concat(variables[command.id])
         else
           newCommands.push command
       commands = [].concat newCommands
 
-      # Remove dupe guides
-      newCommands = []
-      for command, i in commands
-        if !command.isGuide or (command.isGuide and !commands[i-1]?.isGuide)
-          newCommands.push command
-      commands = [].concat newCommands
-
     commands
-
-  expandVariables: (commands = [], variables ={}) =>
-    commands = @parseCommands commands if typeof commands is "string"
-
 
   # Look into a string to see if it contains commands
   #
@@ -768,7 +765,7 @@ lengthOf = (command, variables) ->
 
   sum = 0
   for command in variables[command.id]
-    sum += command.unit.value
+    sum += command.unit?.base || 0
   sum
 
 # Assign an error code to a command and a master list
