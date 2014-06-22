@@ -210,7 +210,7 @@ class GridNotation
 
     # Set up the margins, if they exist
     firstMargString = '|' + data.firstMargin.replace(/\s/g,'').split(',').join('|') + '|' if data.firstMargin
-    lastMargString  = '|' + data.lastMargin.replace(/\s/g,'').split(',').join('|') + '|' if data.lastMargin
+    lastMargString  = '|' + data.lastMargin.replace(/\s/g,'').split(',').reverse().join('|') + '|' if data.lastMargin
 
     # Set up the columns and gutters variables, if they exist
     if data.count or data.width
