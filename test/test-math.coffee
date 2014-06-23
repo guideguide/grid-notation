@@ -20,7 +20,7 @@ info =
 # common grid scenarios to see if the math is being done correctly.
 describe 'Math', ->
 
-  describe 'basic', ->
+  describe 'explicit', ->
 
     it 'should place a single guide', ->
       assert.deepEqual GN.parse("""
@@ -37,6 +37,16 @@ describe 'Math', ->
         { location: 10, orientation: "h" }
       ]
 
+    it 'should convert inches', ->
+      assert.deepEqual GN.parse("""
+        | 1in |
+      """, info), [
+        { location: 0, orientation: "h" }
+        { location: 72, orientation: "h" }
+      ]
+
+  describe 'percents', ->
+
     it 'should handle percents', ->
       assert.deepEqual GN.parse("""
         | 10% |
@@ -45,13 +55,16 @@ describe 'Math', ->
         { location: 10, orientation: "h" }
       ]
 
-    it 'should convert inches', ->
+    it 'should calculate percents with wildcards', ->
       assert.deepEqual GN.parse("""
-        | 1in |
+        | 10% | ~ | 10% |
       """, info), [
         { location: 0, orientation: "h" }
-        { location: 72, orientation: "h" }
+        { location: 10, orientation: "h" }
+        { location: 90, orientation: "h" }
+        { location: 100, orientation: "h" }
       ]
+
 
   describe 'wildcards', ->
 
@@ -161,7 +174,7 @@ describe 'Math', ->
         { location: 100, orientation: "h" }
       ]
 
-    it.only 'should work with width and gutter', ->
+    it 'should work with width and gutter', ->
       assert.deepEqual GN.parse("""
         $v = | 10px | 10px |
         $vC = | 10px |

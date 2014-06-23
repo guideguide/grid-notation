@@ -37,19 +37,28 @@ class GridNotation
 
       wildcards = find grid.commands, (el) -> el.isWildcard
 
+      # If a width was specified, position it.
+      if grid.params.width?.unit?.base
+        adjustRemainder = originalWidth - grid.params.width?.unit.base
+
+      # Set value of percent commands
+      percents = find grid.commands, (el) -> el.isPercent
+      for command in percents
+        percentValue = measuredWidth*(command.unit.value/100)
+        percentValue = Math.floor(percentValue) if wholePixels
+        command.unit = @unit.parse("#{ percentValue }px")
+
       # Measure explicit commands
       explicit = find grid.commands, (el) -> el.isExplicit and !el.isFill
       explicitSum = 0
       explicitSum += command.unit.base for command in explicit
 
-      # If a width was specified, position it. If it wasn't, subtract the offsets
-      # from the boundaries.
-      if grid.params.width?.unit?.base
-        adjustRemainder = originalWidth - grid.params.width?.unit.base
-      else
+      # If the width wasn't specified, subtract the offsets from the boundaries.
+      if !grid.params.width?.unit?.base?
         adjustRemainder = originalWidth - explicitSum if wildcards.length == 0
         measuredWidth -= grid.params.firstOffset?.unit?.base || 0
         measuredWidth -= grid.params.lastOffset?.unit?.base || 0
+
       if adjustRemainder > 0
         adjustRemainder -= grid.params.firstOffset?.unit?.base || 0
         adjustRemainder -= grid.params.lastOffset?.unit?.base || 0
@@ -126,13 +135,6 @@ class GridNotation
       # Figure out where the grid starts
       insertMarker = grid.params.firstOffset?.unit.base
       insertMarker ||= offset
-
-      # Set value of percent commands
-      percents = find grid.commands, (el) -> el.isPercent
-      for command in percents
-        percentValue = measuredWidth*(command.unit.value/100)
-        percentValue = Math.floor(percentValue) if wholePixels
-        command.unit = @unit.parse("#{ percentValue }px")
 
       # Remove dupe guides
       newCommands = []
