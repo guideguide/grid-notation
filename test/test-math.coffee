@@ -161,6 +161,25 @@ describe 'Math', ->
         { location: 100, orientation: "h" }
       ]
 
+    it.only 'should work with width and gutter', ->
+      assert.deepEqual GN.parse("""
+        $v = | 10px | 10px |
+        $vC = | 10px |
+        | $v* | $vC | ( vl, | ~ )
+      """, info), [
+        { location: 0, orientation: "v" }
+        { location: 10, orientation: "v" }
+        { location: 20, orientation: "v" }
+        { location: 30, orientation: "v" }
+        { location: 40, orientation: "v" }
+        { location: 50, orientation: "v" }
+        { location: 60, orientation: "v" }
+        { location: 70, orientation: "v" }
+        { location: 80, orientation: "v" }
+        { location: 90, orientation: "v" }
+      ]
+
+
     it 'should parse cascading multiples', ->
       assert.deepEqual GN.parse("""
         $ = 10px
