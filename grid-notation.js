@@ -24,7 +24,7 @@
     }
 
     GridNotation.prototype.parse = function(string, info) {
-      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, key, measuredWidth, newCommand, newCommands, offset, originalWidth, percentValue, percents, remainderOffset, remainderPixels, stretchDivisions, tested, variable, wholePixels, wildcardArea, wildcardWidth, wildcards, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p, _q, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, key, measuredWidth, newCommand, newCommands, offset, originalWidth, percentValue, percents, remainderOffset, remainderPixels, stretchDivisions, tested, variable, wholePixels, wildcardArea, wildcardWidth, wildcards, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p, _q, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
       if (string == null) {
         string = "";
       }
@@ -68,53 +68,65 @@
         wildcards = find(grid.commands, function(el) {
           return el.isWildcard;
         });
+        if ((_ref4 = grid.params.width) != null ? (_ref5 = _ref4.unit) != null ? _ref5.base : void 0 : void 0) {
+          adjustRemainder = originalWidth - ((_ref6 = grid.params.width) != null ? _ref6.unit.base : void 0);
+        }
+        percents = find(grid.commands, function(el) {
+          return el.isPercent;
+        });
+        for (_j = 0, _len1 = percents.length; _j < _len1; _j++) {
+          command = percents[_j];
+          percentValue = measuredWidth * (command.unit.value / 100);
+          if (wholePixels) {
+            percentValue = Math.floor(percentValue);
+          }
+          command.unit = this.unit.parse("" + percentValue + "px");
+        }
         explicit = find(grid.commands, function(el) {
           return el.isExplicit && !el.isFill;
         });
         explicitSum = 0;
-        for (_j = 0, _len1 = explicit.length; _j < _len1; _j++) {
-          command = explicit[_j];
+        for (_k = 0, _len2 = explicit.length; _k < _len2; _k++) {
+          command = explicit[_k];
           explicitSum += command.unit.base;
         }
-        if ((_ref4 = grid.params.width) != null ? (_ref5 = _ref4.unit) != null ? _ref5.base : void 0 : void 0) {
-          adjustRemainder = originalWidth - ((_ref6 = grid.params.width) != null ? _ref6.unit.base : void 0);
-        } else {
+        if (((_ref7 = grid.params.width) != null ? (_ref8 = _ref7.unit) != null ? _ref8.base : void 0 : void 0) == null) {
           if (wildcards.length === 0) {
             adjustRemainder = originalWidth - explicitSum;
           }
-          measuredWidth -= ((_ref7 = grid.params.firstOffset) != null ? (_ref8 = _ref7.unit) != null ? _ref8.base : void 0 : void 0) || 0;
-          measuredWidth -= ((_ref9 = grid.params.lastOffset) != null ? (_ref10 = _ref9.unit) != null ? _ref10.base : void 0 : void 0) || 0;
+          measuredWidth -= ((_ref9 = grid.params.firstOffset) != null ? (_ref10 = _ref9.unit) != null ? _ref10.base : void 0 : void 0) || 0;
+          measuredWidth -= ((_ref11 = grid.params.lastOffset) != null ? (_ref12 = _ref11.unit) != null ? _ref12.base : void 0 : void 0) || 0;
         }
         if (adjustRemainder > 0) {
-          adjustRemainder -= ((_ref11 = grid.params.firstOffset) != null ? (_ref12 = _ref11.unit) != null ? _ref12.base : void 0 : void 0) || 0;
-          adjustRemainder -= ((_ref13 = grid.params.lastOffset) != null ? (_ref14 = _ref13.unit) != null ? _ref14.base : void 0 : void 0) || 0;
+          adjustRemainder -= ((_ref13 = grid.params.firstOffset) != null ? (_ref14 = _ref13.unit) != null ? _ref14.base : void 0 : void 0) || 0;
+          adjustRemainder -= ((_ref15 = grid.params.lastOffset) != null ? (_ref16 = _ref15.unit) != null ? _ref16.base : void 0 : void 0) || 0;
         }
-        if ((_ref15 = grid.params.firstOffset) != null ? _ref15.isWildcard : void 0) {
+        if ((_ref17 = grid.params.firstOffset) != null ? _ref17.isWildcard : void 0) {
           stretchDivisions++;
         }
-        if ((_ref16 = grid.params.lastOffset) != null ? _ref16.isWildcard : void 0) {
+        if ((_ref18 = grid.params.lastOffset) != null ? _ref18.isWildcard : void 0) {
           stretchDivisions++;
         }
         adjust = adjustRemainder / stretchDivisions;
-        if ((_ref17 = grid.params.firstOffset) != null ? _ref17.isWildcard : void 0) {
+        if ((_ref19 = grid.params.firstOffset) != null ? _ref19.isWildcard : void 0) {
           if (wholePixels) {
             adjust = Math.ceil(adjust);
           }
           grid.params.firstOffset = this.cmd.parse("" + adjust + "px");
         }
-        if ((_ref18 = grid.params.lastOffset) != null ? _ref18.isWildcard : void 0) {
+        if ((_ref20 = grid.params.lastOffset) != null ? _ref20.isWildcard : void 0) {
           if (wholePixels) {
             adjust = Math.floor(adjust);
           }
           grid.params.lastOffset = this.cmd.parse("" + adjust + "px");
         }
-        offset += ((_ref19 = grid.params.firstOffset) != null ? _ref19.unit.base : void 0) || 0;
+        offset += ((_ref21 = grid.params.firstOffset) != null ? _ref21.unit.base : void 0) || 0;
         wildcardArea = measuredWidth - explicitSum;
         if (wildcardArea && fill) {
           fillIterations = Math.floor(wildcardArea / lengthOf(fill, gn.variables));
           fillCollection = [];
           fillWidth = 0;
-          for (i = _k = 1; 1 <= fillIterations ? _k <= fillIterations : _k >= fillIterations; i = 1 <= fillIterations ? ++_k : --_k) {
+          for (i = _l = 1; 1 <= fillIterations ? _l <= fillIterations : _l >= fillIterations; i = 1 <= fillIterations ? ++_l : --_l) {
             if (fill.isVariable) {
               fillCollection = fillCollection.concat(gn.variables[fill.id]);
               fillWidth += lengthOf(fill, gn.variables);
@@ -126,9 +138,9 @@
           }
           wildcardArea -= fillWidth;
           newCommands = [];
-          _ref20 = grid.commands;
-          for (i = _l = 0, _len2 = _ref20.length; _l < _len2; i = ++_l) {
-            command = _ref20[i];
+          _ref22 = grid.commands;
+          for (i = _m = 0, _len3 = _ref22.length; _m < _len3; i = ++_m) {
+            command = _ref22[i];
             if (command.isFill) {
               newCommands = newCommands.concat(fillCollection);
             } else {
@@ -143,8 +155,8 @@
             wildcardWidth = Math.floor(wildcardWidth);
             remainderPixels = wildcardArea % wildcards.length;
           }
-          for (_m = 0, _len3 = wildcards.length; _m < _len3; _m++) {
-            command = wildcards[_m];
+          for (_n = 0, _len4 = wildcards.length; _n < _len4; _n++) {
+            command = wildcards[_n];
             command.isWildcard = false;
             command.isExplicit = true;
             command.isFill = true;
@@ -161,38 +173,27 @@
           if (grid.params.remainder === 'l') {
             remainderOffset = wildcards.length - remainderPixels;
           }
-          for (i = _n = 0, _len4 = wildcards.length; _n < _len4; i = ++_n) {
+          for (i = _o = 0, _len5 = wildcards.length; _o < _len5; i = ++_o) {
             command = wildcards[i];
             if (i >= remainderOffset && i < remainderOffset + remainderPixels) {
               command.unit = this.unit.parse("" + (wildcardWidth + 1) + "px");
             }
           }
         }
-        insertMarker = (_ref21 = grid.params.firstOffset) != null ? _ref21.unit.base : void 0;
+        insertMarker = (_ref23 = grid.params.firstOffset) != null ? _ref23.unit.base : void 0;
         insertMarker || (insertMarker = offset);
-        percents = find(grid.commands, function(el) {
-          return el.isPercent;
-        });
-        for (_o = 0, _len5 = percents.length; _o < _len5; _o++) {
-          command = percents[_o];
-          percentValue = measuredWidth * (command.unit.value / 100);
-          if (wholePixels) {
-            percentValue = Math.floor(percentValue);
-          }
-          command.unit = this.unit.parse("" + percentValue + "px");
-        }
         newCommands = [];
-        _ref22 = grid.commands;
-        for (i = _p = 0, _len6 = _ref22.length; _p < _len6; i = ++_p) {
-          command = _ref22[i];
-          if (!command.isGuide || (command.isGuide && !((_ref23 = grid.commands[i - 1]) != null ? _ref23.isGuide : void 0))) {
+        _ref24 = grid.commands;
+        for (i = _p = 0, _len6 = _ref24.length; _p < _len6; i = ++_p) {
+          command = _ref24[i];
+          if (!command.isGuide || (command.isGuide && !((_ref25 = grid.commands[i - 1]) != null ? _ref25.isGuide : void 0))) {
             newCommands.push(command);
           }
         }
         grid.commands = [].concat(newCommands);
-        _ref24 = grid.commands;
-        for (_q = 0, _len7 = _ref24.length; _q < _len7; _q++) {
-          command = _ref24[_q];
+        _ref26 = grid.commands;
+        for (_q = 0, _len7 = _ref26.length; _q < _len7; _q++) {
+          command = _ref26[_q];
           if (command.isGuide) {
             guides.push({
               location: insertMarker,
