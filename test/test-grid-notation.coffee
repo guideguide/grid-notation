@@ -406,6 +406,14 @@ describe 'Grid Notation', ->
       """
       assert.equal GN.stringify(count: "3", width: "10px"), string
 
+    it 'should stringify width and gutter', ->
+      string = """
+        $v = | 10px | 10px |
+        $vC = | 10px |
+        | $v* | $vC | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(width: "10px", gutter: "10px"), string
+
     it 'should not stringify only column midpoint', ->
       assert.equal GN.stringify(columnMidpoint: true), ""
 
