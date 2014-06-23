@@ -275,9 +275,7 @@
             gutter = data.gutter ? "" + (unit.value / 2) + unit.type + "|" + (unit.value / 2) + unit.type : "~|~";
           }
           varString = "$" + data.orientation + " = |" + column + "|" + gutter + "|\n";
-          if (data.count) {
-            varString += "$" + data.orientation + "C = |" + column + "|\n";
-          }
+          varString += "$" + data.orientation + "C = |" + column + "|\n";
         }
       }
       if (data.count || data.width) {
@@ -292,7 +290,7 @@
           gridString += data.count;
         }
         gridString += "|";
-        if (data.count > 1 && data.gutter) {
+        if (data.gutter) {
           gridString += "|$" + data.orientation + (data.gutter ? 'C' : '') + "|";
         }
       }
