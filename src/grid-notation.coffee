@@ -229,7 +229,7 @@ class GridNotation
           gutter = if data.gutter then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
 
         varString  = "$#{ data.orientation } = |#{ column }|#{ gutter }|\n"
-        varString += "$#{ data.orientation }C = |#{ column }|\n" if data.count
+        varString += "$#{ data.orientation }C = |#{ column }|\n"
 
     # Set up the grid string
     if data.count or data.width
@@ -238,7 +238,7 @@ class GridNotation
       gridString += data.count - 1 if data.count > 1 and data.gutter
       gridString += data.count if data.count > 1 and !data.gutter
       gridString += "|"
-      gridString += "|$#{ data.orientation }#{ if data.gutter then 'C' else '' }|" if data.count > 1 and data.gutter
+      gridString += "|$#{ data.orientation }#{ if data.gutter then 'C' else '' }|" if data.gutter
 
     if (!data.count and !data.width) and data.firstMargin
       gridString += "|"
