@@ -6,6 +6,8 @@ After a few years of using GuideGuide, I became frustrated that I couldn't move 
 
 For more information, see the [spec](SPEC.md).
 
+A special note: I consider myself a "developer" more than I consider myself a *developer*. I'm positive there are more efficient ways to write this code (ignoring Coffeescript vs Javascript dogma, of course). If you're interested in improving the parsing of grid notation, by all means, submit a pull request and help me learn something new.
+
 ### Setup
 
 ```
