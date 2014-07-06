@@ -15,6 +15,7 @@
   "private": true,
   "ignore": [
     "**/*",
+    "bower.json",
     "./!(grid-notation.js)"
   ]
 }
