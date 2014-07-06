@@ -14,12 +14,7 @@
   "license": "MIT",
   "private": true,
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "src",
-    "script",
-    "SPEC.md"
+    "**/*",
+    "./!(grid-notation.js)"
   ]
 }
