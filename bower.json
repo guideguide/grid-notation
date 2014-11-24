@@ -5,7 +5,7 @@
     "Cameron McEfee <cm@cameronmcefee.com>"
   ],
   "description": "A human friendly(ish), written grid language",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "grid-notation.js",
   "keywords": [
     "guides",
@@ -15,7 +15,11 @@
   "license": "MIT",
   "private": true,
   "ignore": [
-    "**/*",
-    "./!(grid-notation.js)"
+    "**/.*",
+    "./script",
+    "./src",
+    "./test",
+    "./bower.json",
+    "./package.json"
   ]
 }
