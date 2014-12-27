@@ -668,7 +668,7 @@
       string = "";
       for (_i = 0, _len = commands.length; _i < _len; _i++) {
         command = commands[_i];
-        string += this.cmd.stringify(command);
+        string += " " + this.cmd.stringify(command);
       }
       return this.pipeCleaner(string);
     };
