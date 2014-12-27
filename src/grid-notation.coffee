@@ -535,7 +535,7 @@ class GridNotation
   # Returns a String.
   stringifyCommands: (commands) =>
     string = ""
-    string += @cmd.stringify(command) for command in commands
+    string += " " + @cmd.stringify(command) for command in commands
     @pipeCleaner string
 
   # Convert a grid's params to a guiden notation spec compliant string.

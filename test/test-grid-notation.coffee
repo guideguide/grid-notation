@@ -75,6 +75,7 @@ describe 'Grid Notation', ->
 
     it 'should detect multiple fills', ->
       assert.equal GN.clean("10px*|10px*"), "10px* | {10px* [4]} ( hl )"
+      assert.equal GN.clean("10px* 10px*"), "10px* {10px* [4]} ( hl )"
 
     it 'should detect multiple fills when used in variables', ->
       gn = """
