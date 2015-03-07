@@ -436,12 +436,46 @@ describe 'Grid Notation', ->
       """
       assert.equal GN.stringify(data), string
 
+    it 'should round column midpoint when set to snap with pixels', ->
+      data = count: "3", width: "9px", columnMidpoint: true, calculation: 'p'
+      string = """
+        $v = | 4px | 5px |
+        | $v*3 | ( vlp, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should not round column midpoint when set to snap with not pixels', ->
+      data = count: "3", width: "9in", columnMidpoint: true, calculation: 'p'
+      string = """
+        $v = | 4.5in | 4.5in |
+        | $v*3 | ( vlp, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
     it 'should stringify gutter midpoint with count and gutter', ->
       data = count: "3", gutter: "10px", gutterMidpoint: true
       string = """
         $v = | ~ | 5px | 5px |
         $vC = | ~ |
         | $v*2 | $vC | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should round gutter midpoint with when set to snap and pixels', ->
+      data = count: "3", gutter: "9px", gutterMidpoint: true, calculation: 'p'
+      string = """
+        $v = | ~ | 4px | 5px |
+        $vC = | ~ |
+        | $v*2 | $vC | ( vlp, | ~ )
+      """
+      assert.equal GN.stringify(data), string
+
+    it 'should not round gutter midpoint with when set to snap and not pixels', ->
+      data = count: "3", gutter: "9in", gutterMidpoint: true, calculation: 'p'
+      string = """
+        $v = | ~ | 4.5in | 4.5in |
+        $vC = | ~ |
+        | $v*2 | $vC | ( vlp, | ~ )
       """
       assert.equal GN.stringify(data), string
 

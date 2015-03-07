@@ -218,17 +218,25 @@ class GridNotation
     if data.count or data.width
       column = if data.width then data.width else '~'
       if data.columnMidpoint
+        left = right = '~'
+        if data.width
+          unit  = @unit.parse(data.width)
+          left  = "#{if data.calculation is 'p' and unit.type is 'px' then Math.floor(unit.value/2) else unit.value/2}#{ unit.type }"
+          right = "#{if data.calculation is 'p' and unit.type is 'px' then Math.ceil(unit.value/2) else unit.value/2}#{ unit.type }"
 
-        unit   = @unit.parse(data.width) if data.width
-        column = if data.width then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
+        column = "#{ left }|#{ right }"
 
       varString += "$#{ data.orientation } = |#{ column }|\n"
 
       if data.gutter and data.count != 1
         gutter = if data.gutter then data.gutter else '~'
         if data.gutterMidpoint
-          unit   = @unit.parse(data.gutter) if data.gutter
-          gutter = if data.gutter then "#{ unit.value/2 }#{ unit.type }|#{ unit.value/2 }#{ unit.type }" else "~|~"
+          left = right = '~'
+          if data.gutter
+            unit  = @unit.parse(data.gutter)
+            left  = "#{if data.calculation is 'p' and unit.type is 'px' then Math.floor(unit.value/2) else unit.value/2}#{ unit.type }"
+            right = "#{if data.calculation is 'p' and unit.type is 'px' then Math.ceil(unit.value/2) else unit.value/2}#{ unit.type }"
+          gutter = "#{ left }|#{ right }"
 
         varString  = "$#{ data.orientation } = |#{ column }|#{ gutter }|\n"
         varString += "$#{ data.orientation }C = |#{ column }|\n"
