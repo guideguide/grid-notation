@@ -234,7 +234,7 @@
     };
 
     GridNotation.prototype.stringify = function(data) {
-      var column, firstMargString, gridString, gutter, lastMargString, optionsString, unit, varString;
+      var column, firstMargString, gridString, gutter, lastMargString, left, optionsString, right, unit, varString;
       data || (data = {});
       data.count = parseInt(data.count);
       data.width || (data.width = '');
@@ -261,19 +261,25 @@
       if (data.count || data.width) {
         column = data.width ? data.width : '~';
         if (data.columnMidpoint) {
+          left = right = '~';
           if (data.width) {
             unit = this.unit.parse(data.width);
+            left = "" + (data.calculation === 'p' && unit.type === 'px' ? Math.floor(unit.value / 2) : unit.value / 2) + unit.type;
+            right = "" + (data.calculation === 'p' && unit.type === 'px' ? Math.ceil(unit.value / 2) : unit.value / 2) + unit.type;
           }
-          column = data.width ? "" + (unit.value / 2) + unit.type + "|" + (unit.value / 2) + unit.type : "~|~";
+          column = "" + left + "|" + right;
         }
         varString += "$" + data.orientation + " = |" + column + "|\n";
         if (data.gutter && data.count !== 1) {
           gutter = data.gutter ? data.gutter : '~';
           if (data.gutterMidpoint) {
+            left = right = '~';
             if (data.gutter) {
               unit = this.unit.parse(data.gutter);
+              left = "" + (data.calculation === 'p' && unit.type === 'px' ? Math.floor(unit.value / 2) : unit.value / 2) + unit.type;
+              right = "" + (data.calculation === 'p' && unit.type === 'px' ? Math.ceil(unit.value / 2) : unit.value / 2) + unit.type;
             }
-            gutter = data.gutter ? "" + (unit.value / 2) + unit.type + "|" + (unit.value / 2) + unit.type : "~|~";
+            gutter = "" + left + "|" + right;
           }
           varString = "$" + data.orientation + " = |" + column + "|" + gutter + "|\n";
           varString += "$" + data.orientation + "C = |" + column + "|\n";
