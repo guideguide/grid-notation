@@ -5,7 +5,6 @@
     "Cameron McEfee <cm@cameronmcefee.com>"
   ],
   "description": "A human friendly(ish), written grid language",
-  "version": "0.0.9",
   "main": "grid-notation.js",
   "keywords": [
     "guides",
