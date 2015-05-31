@@ -297,7 +297,7 @@
           gridString += data.count;
         }
         gridString += "|";
-        if (data.gutter) {
+        if (data.gutter && data.count !== 1) {
           gridString += "|$" + data.orientation + (data.gutter ? 'C' : '') + "|";
         }
       }
