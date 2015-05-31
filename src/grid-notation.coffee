@@ -248,7 +248,7 @@ class GridNotation
       gridString += data.count - 1 if data.count > 1 and data.gutter
       gridString += data.count if data.count > 1 and !data.gutter
       gridString += "|"
-      gridString += "|$#{ data.orientation }#{ if data.gutter then 'C' else '' }|" if data.gutter
+      gridString += "|$#{ data.orientation }#{ if data.gutter then 'C' else '' }|" if data.gutter and data.count != 1
 
     if (!data.count and !data.width) and data.firstMargin
       gridString += "|"

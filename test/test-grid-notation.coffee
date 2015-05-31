@@ -415,6 +415,13 @@ describe 'Grid Notation', ->
       """
       assert.equal GN.stringify(width: "10px", gutter: "10px"), string
 
+    it.only 'should ignore gutter with count of 1 and width and gutter', ->
+      string = """
+        $v = | 10px |
+        | $v | ( vl, | ~ )
+      """
+      assert.equal GN.stringify(count: "1", width: "10px", gutter: "10px"), string
+
     it 'should not stringify only column midpoint', ->
       assert.equal GN.stringify(columnMidpoint: true), ""
 
