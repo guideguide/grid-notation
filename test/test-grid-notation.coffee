@@ -116,6 +116,17 @@ describe 'Grid Notation', ->
       10px | $A | (vl)
       """, info), out
 
+    it 'should properly align right aligned fills', ->
+      out = [ { location: 10, orientation: 'v' },
+      { location: 40, orientation: 'v' },
+      { location: 70, orientation: 'v' },
+      { location: 100, orientation: 'v' } ]
+
+      assert.deepEqual GN.parse("""
+      $v = | 30px |
+      | $v* | ( vlp, ~ | )
+      """, info), out
+
   describe "Testing", ->
 
     it 'should succeed for good grid notation', ->
