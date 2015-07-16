@@ -31,6 +31,7 @@ class GridNotation
       offset           = if guideOrientation == 'h' then info.offsetY else info.offsetX
       stretchDivisions = 0
       adjustRemainder  = 0
+      wildcardArea     = measuredWidth
 
       # Expand any fills or variables
       grid.commands = @expandCommands grid.commands, gn.variables
@@ -53,34 +54,10 @@ class GridNotation
       explicitSum = 0
       explicitSum += command.unit.base for command in explicit
 
-      # If the width wasn't specified, subtract the offsets from the boundaries.
-      if !grid.params.width?.unit?.base?
-        adjustRemainder = originalWidth - explicitSum if wildcards.length == 0
-        measuredWidth -= grid.params.firstOffset?.unit?.base || 0
-        measuredWidth -= grid.params.lastOffset?.unit?.base || 0
-
-      if adjustRemainder > 0
-        adjustRemainder -= grid.params.firstOffset?.unit?.base || 0
-        adjustRemainder -= grid.params.lastOffset?.unit?.base || 0
-
-      # Calculate wild offsets
-      stretchDivisions++ if grid.params.firstOffset?.isWildcard
-      stretchDivisions++ if grid.params.lastOffset?.isWildcard
-      adjust = adjustRemainder/stretchDivisions
-      if grid.params.firstOffset?.isWildcard
-        adjust = Math.ceil(adjust) if wholePixels
-        grid.params.firstOffset = @cmd.parse("#{ adjust }px")
-      if grid.params.lastOffset?.isWildcard
-        adjust = Math.floor(adjust) if wholePixels
-        grid.params.lastOffset = @cmd.parse("#{ adjust }px")
-
-      # Adjust the first offset.
-      offset += grid.params.firstOffset?.unit.base || 0
-
-      wildcardArea = measuredWidth - explicitSum
+      wildcardArea -= explicitSum
 
       # Calculate fills
-      if wildcardArea and fill
+      if fill
         fillIterations = Math.floor wildcardArea/lengthOf(fill, gn.variables)
         fillCollection = []
         fillWidth = 0
@@ -103,6 +80,35 @@ class GridNotation
           else
             newCommands.push command
         grid.commands = [].concat newCommands
+
+      # Measure explicit commands
+      explicit = find grid.commands, (el) -> el.isExplicit and !el.isFill
+      explicitSum = 0
+      explicitSum += command.unit.base for command in explicit
+
+      # If the width wasn't specified, subtract the offsets from the boundaries.
+      if !grid.params.width?.unit?.base?
+        adjustRemainder = originalWidth - explicitSum if wildcards.length == 0
+        wildcardArea -= grid.params.firstOffset?.unit?.base || 0
+        wildcardArea -= grid.params.lastOffset?.unit?.base || 0
+
+      if adjustRemainder > 0
+        adjustRemainder -= grid.params.firstOffset?.unit?.base || 0
+        adjustRemainder -= grid.params.lastOffset?.unit?.base || 0
+
+      # Calculate wild offsets
+      stretchDivisions++ if grid.params.firstOffset?.isWildcard
+      stretchDivisions++ if grid.params.lastOffset?.isWildcard
+      adjust = adjustRemainder/stretchDivisions
+      if grid.params.firstOffset?.isWildcard
+        adjust = Math.ceil(adjust) if wholePixels
+        grid.params.firstOffset = @cmd.parse("#{ adjust }px")
+      if grid.params.lastOffset?.isWildcard
+        adjust = Math.floor(adjust) if wholePixels
+        grid.params.lastOffset = @cmd.parse("#{ adjust }px")
+
+      # Adjust the first offset.
+      offset += grid.params.firstOffset?.unit.base || 0
 
       # Set the width of any wildcards
       if wildcardArea and wildcards
