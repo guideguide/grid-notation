@@ -1036,7 +1036,7 @@
           unit.value = unit.value / this.resolution;
           break;
         case 'points':
-          unit.value = unit.value / this.resolution;
+          unit.value = unit.value / 72;
           break;
         case 'picas':
           unit.value = unit.value / 6;
