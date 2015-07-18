@@ -35,6 +35,10 @@ describe 'Units', ->
         type: "px"
         base: 1
 
+    it 'should allow integers and floating point numbers', ->
+      assert.deepEqual Unit.parse("1"), 1
+      assert.deepEqual Unit.parse(".5"), .5
+
   describe 'Base value from unit object', ->
 
     it 'should return null when a bad value is given', ->

@@ -948,7 +948,7 @@
     }
 
     Unit.prototype.parse = function(string) {
-      var bits, value;
+      var bits, value, zeroAdjustedValue;
       if (string == null) {
         string = "";
       }
@@ -961,8 +961,9 @@
         return null;
       }
       if (bits[1] && !bits[2]) {
+        zeroAdjustedValue = bits[1].replace(/^\./, '0.');
         value = parseFloat(bits[1]);
-        if (value.toString() === bits[1]) {
+        if (value.toString() === zeroAdjustedValue) {
           return value;
         } else {
           return null;

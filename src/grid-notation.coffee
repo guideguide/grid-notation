@@ -772,8 +772,9 @@ class Unit
 
     # Integer
     if bits[1] and !bits[2]
+      zeroAdjustedValue = bits[1].replace(/^\./, '0.')
       value = parseFloat bits[1]
-      return if value.toString() == bits[1] then value else null
+      return if value.toString() == zeroAdjustedValue then value else null
 
     # Unit pair
     string: string
