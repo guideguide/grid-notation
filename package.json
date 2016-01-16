@@ -1,6 +1,5 @@
 {
   "name": "grid-notation",
-  "version": "0.0.1",
   "description": "A written language to describe grids",
   "engines": {
     "node": "0.10",
