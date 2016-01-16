@@ -65,6 +65,15 @@ describe 'Math', ->
         { location: 100, orientation: "h" }
       ]
 
+    it 'should calculate percents in fill variables', ->
+      assert.deepEqual GN.parse("""
+        $ = | 50% |
+        | $* |
+      """, info), [
+        { location: 0, orientation: "h" }
+        { location: 50, orientation: "h" }
+        { location: 100, orientation: "h" }
+      ]
 
   describe 'wildcards', ->
 
