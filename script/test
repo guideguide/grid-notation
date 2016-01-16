@@ -3,4 +3,4 @@
 #
 # Run tests
 
-mocha --compilers coffee:coffee-script/register --watch
+./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --watch
