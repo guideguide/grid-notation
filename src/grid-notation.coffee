@@ -44,6 +44,9 @@ class GridNotation
 
       # Set value of percent commands
       percents = find grid.commands, (el) -> el.isPercent
+      for k,v of gn.variables
+        percents = percents.concat find v, (el) -> el.isPercent
+
       for command in percents
         percentValue = measuredWidth*(command.unit.value/100)
         percentValue = Math.floor(percentValue) if wholePixels
