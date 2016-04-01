@@ -24,7 +24,7 @@
     }
 
     GridNotation.prototype.parse = function(string, info) {
-      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, j, k, key, l, len, len1, len2, len3, len4, len5, len6, len7, len8, m, measuredWidth, n, newCommand, newCommands, o, offset, originalWidth, p, percentValue, percents, q, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref23, ref24, ref25, ref26, ref27, ref28, ref3, ref4, ref5, ref6, ref7, ref8, ref9, remainderOffset, remainderPixels, s, stretchDivisions, t, tested, v, variable, wholePixels, wildcardArea, wildcardWidth, wildcards;
+      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, j, k, key, l, len, len1, len2, len3, len4, len5, len6, len7, len8, m, measuredWidth, n, newCommand, newCommands, o, offset, originalWidth, p, percentValue, percents, q, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref23, ref24, ref25, ref26, ref27, ref3, ref4, ref5, ref6, ref7, ref8, ref9, remainderOffset, remainderPixels, s, stretchDivisions, t, tested, v, variable, wholePixels, wildcardArea, wildcardWidth, wildcards;
       if (string == null) {
         string = "";
       }
@@ -196,20 +196,19 @@
             }
           }
         }
-        insertMarker = (ref25 = grid.params.firstOffset) != null ? ref25.unit.base : void 0;
-        insertMarker || (insertMarker = offset);
+        insertMarker = offset;
         newCommands = [];
-        ref26 = grid.commands;
-        for (i = s = 0, len7 = ref26.length; s < len7; i = ++s) {
-          command = ref26[i];
-          if (!command.isGuide || (command.isGuide && !((ref27 = grid.commands[i - 1]) != null ? ref27.isGuide : void 0))) {
+        ref25 = grid.commands;
+        for (i = s = 0, len7 = ref25.length; s < len7; i = ++s) {
+          command = ref25[i];
+          if (!command.isGuide || (command.isGuide && !((ref26 = grid.commands[i - 1]) != null ? ref26.isGuide : void 0))) {
             newCommands.push(command);
           }
         }
         grid.commands = [].concat(newCommands);
-        ref28 = grid.commands;
-        for (t = 0, len8 = ref28.length; t < len8; t++) {
-          command = ref28[t];
+        ref27 = grid.commands;
+        for (t = 0, len8 = ref27.length; t < len8; t++) {
+          command = ref27[t];
           if (command.isGuide) {
             guides.push({
               location: insertMarker,

@@ -229,6 +229,23 @@ describe 'Math', ->
           { location: 90, orientation: "h" }
           { location: 100, orientation: "h" }
         ]
+        offsetInfo =
+          hasOpenDocuments: true
+          isSelection: false
+          width: 100
+          height: 100
+          offsetX: 0
+          offsetY: -100
+          ruler: 'pixels'
+          existingGuides: []
+
+        assert.deepEqual GN.parse("""
+          | 10px | ( ~ | )
+        """, offsetInfo), [
+          { location: -10, orientation: "h" }
+          { location: 0, orientation: "h" }
+        ]
+
 
       it 'should work with a right offset', ->
         assert.deepEqual GN.parse("""

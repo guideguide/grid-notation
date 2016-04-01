@@ -142,8 +142,7 @@ class GridNotation
             command.unit = @unit.parse("#{ wildcardWidth+1 }px")
 
       # Figure out where the grid starts
-      insertMarker = grid.params.firstOffset?.unit.base
-      insertMarker ||= offset
+      insertMarker = offset
 
       # Remove dupe guides
       newCommands = []
