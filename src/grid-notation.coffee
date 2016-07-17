@@ -61,7 +61,9 @@ class GridNotation
 
       # Calculate fills
       if fill
-        fillIterations = Math.floor wildcardArea/lengthOf(fill, gn.variables)
+        length = lengthOf(fill, gn.variables)
+        fillIterations = 0
+        fillIterations = Math.floor(wildcardArea/length) if length > 0
         fillCollection = []
         fillWidth = 0
 

@@ -127,6 +127,21 @@ describe 'Grid Notation', ->
       | $v* | ( vlp, ~ | )
       """, info), out
 
+    it 'should treat zero value fills as 0 instances', ->
+      assert.deepEqual GN.parse("""
+      | 0px* | (vl)
+      """, info), [
+        { location: 0, orientation: 'v' }
+        { location: 0, orientation: 'v' }
+      ]
+      assert.deepEqual GN.parse("""
+      $ = 0px
+      | $* | (vl)
+      """, info), [
+        { location: 0, orientation: 'v' }
+        { location: 0, orientation: 'v' }
+      ]
+
   describe "Testing", ->
 
     it 'should succeed for good grid notation', ->
