@@ -24,7 +24,7 @@
     }
 
     GridNotation.prototype.parse = function(string, info) {
-      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, j, k, key, l, len, len1, len2, len3, len4, len5, len6, len7, len8, m, measuredWidth, n, newCommand, newCommands, o, offset, originalWidth, p, percentValue, percents, q, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref23, ref24, ref25, ref26, ref27, ref3, ref4, ref5, ref6, ref7, ref8, ref9, remainderOffset, remainderPixels, s, stretchDivisions, t, tested, v, variable, wholePixels, wildcardArea, wildcardWidth, wildcards;
+      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, j, k, key, l, len, len1, len2, len3, len4, len5, len6, len7, len8, length, m, measuredWidth, n, newCommand, newCommands, o, offset, originalWidth, p, percentValue, percents, q, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref23, ref24, ref25, ref26, ref27, ref3, ref4, ref5, ref6, ref7, ref8, ref9, remainderOffset, remainderPixels, s, stretchDivisions, t, tested, v, variable, wholePixels, wildcardArea, wildcardWidth, wildcards;
       if (string == null) {
         string = "";
       }
@@ -100,7 +100,11 @@
         }
         wildcardArea -= explicitSum;
         if (fill) {
-          fillIterations = Math.floor(wildcardArea / lengthOf(fill, gn.variables));
+          length = lengthOf(fill, gn.variables);
+          fillIterations = 0;
+          if (length > 0) {
+            fillIterations = Math.floor(wildcardArea / length);
+          }
           fillCollection = [];
           fillWidth = 0;
           for (i = n = 1, ref8 = fillIterations; 1 <= ref8 ? n <= ref8 : n >= ref8; i = 1 <= ref8 ? ++n : --n) {
