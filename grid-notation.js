@@ -99,6 +99,9 @@
           explicitSum += command.unit.base;
         }
         wildcardArea -= explicitSum;
+        if (wildcardArea < 0) {
+          wildcardArea = 0;
+        }
         if (fill) {
           length = lengthOf(fill, gn.variables);
           fillIterations = 0;
@@ -169,7 +172,7 @@
           grid.params.lastOffset = this.cmd.parse(adjust + "px");
         }
         offset += ((ref24 = grid.params.firstOffset) != null ? ref24.unit.base : void 0) || 0;
-        if (wildcardArea && wildcards) {
+        if ((wildcardArea != null) && wildcards) {
           wildcardWidth = wildcardArea / wildcards.length;
           if (wholePixels) {
             wildcardWidth = Math.floor(wildcardWidth);
