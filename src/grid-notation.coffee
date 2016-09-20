@@ -58,6 +58,7 @@ class GridNotation
       explicitSum += command.unit.base for command in explicit
 
       wildcardArea -= explicitSum
+      wildcardArea = 0 if wildcardArea < 0
 
       # Calculate fills
       if fill
@@ -116,7 +117,7 @@ class GridNotation
       offset += grid.params.firstOffset?.unit.base || 0
 
       # Set the width of any wildcards
-      if wildcardArea and wildcards
+      if wildcardArea? and wildcards
         wildcardWidth = wildcardArea/wildcards.length
 
         if wholePixels

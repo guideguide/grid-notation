@@ -20,6 +20,18 @@ info =
 # common grid scenarios to see if the math is being done correctly.
 describe 'Math', ->
 
+  it.only 'should survive zero width scenarios', ->
+    newInfo = {}
+    newInfo[k] = v for k, v of info
+    newInfo.width = 0
+    newInfo.height = 0
+    assert.deepEqual GN.parse("""
+      -10px | 10px ~ 10px |
+    """, newInfo), [
+      { location: -10, orientation: "h" }
+      { location: 10, orientation: "h" }
+    ]
+
   describe 'explicit', ->
 
     it 'should place a single guide', ->
