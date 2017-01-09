@@ -18,7 +18,7 @@ npm install
 
 Grid notation's source is located in *[src/grid-notation.coffee](src/grid-notation.coffee)*. It must be compiled to publish.
 
-Grid notation's tests use [Mocha](http://visionmedia.github.io/mocha/). To run the test watcher, run the following in the terminal:
+Grid notation's tests use [Mocha](http://mochajs.org/). To run the test watcher, run the following in the terminal:
 
 ```
 script/test
