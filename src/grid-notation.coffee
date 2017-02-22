@@ -829,7 +829,7 @@ class Unit
       when 'mm'     then unit.value = unit.value / 25.4
       when 'px'     then unit.value = unit.value / @resolution
       when 'points' then unit.value = unit.value / 72
-      when 'picas'  then unit.value = unit.value / 6
+      when 'picas'  then unit.value = unit.value / 12
       else
         return null
 
