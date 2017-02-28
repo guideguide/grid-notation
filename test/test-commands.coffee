@@ -35,6 +35,9 @@ describe 'Commands', ->
       assert.strictEqual Command.isExplicit("1pt"), true
       assert.strictEqual Command.isExplicit("1pica"), true
       assert.strictEqual Command.isExplicit("1%"), true
+      assert.strictEqual Command.isExplicit("1p"), true
+      assert.strictEqual Command.isExplicit("1p1"), true
+      assert.strictEqual Command.isExplicit("0p1"), true
 
     it 'should fail for non-explicit commands', ->
       assert.strictEqual Command.isExplicit(""), false
@@ -110,6 +113,19 @@ describe 'Commands', ->
           base: 10
         multiplier: 2
 
+    it 'should parse explicit pica/point', ->
+      assert.deepEqual Command.parse("1p1*2"),
+        errors: []
+        isExplicit: true
+        isFill: false
+        isPercent: false
+        unit:
+          string: "1p1*2"
+          value: 7
+          type: "points"
+          base: 7
+        multiplier: 2
+
     it 'should parse unknown', ->
       assert.deepEqual Command.parse("foo"),
         errors: [1]
@@ -121,10 +137,12 @@ describe 'Commands', ->
       assert.strictEqual Command.isFill("~*"), true
       assert.strictEqual Command.isFill("$*"), true
       assert.strictEqual Command.isFill("1px*"), true
+      assert.strictEqual Command.isFill("1p1*"), true
 
     it 'should fail for non-fills', ->
       assert.strictEqual Command.isFill("foo"), false
       assert.strictEqual Command.isFill("10px*2"), false
+      assert.strictEqual Command.isFill("1p1*2"), false
 
     it 'should not count bad values', ->
       assert.equal Command.count("foo"), null
@@ -138,6 +156,9 @@ describe 'Commands', ->
       assert.equal Command.count("1px"), 1
       assert.equal Command.count("1px*"), 1
       assert.equal Command.count("1px*2"), 2
+      assert.equal Command.count("1p1"), 1
+      assert.equal Command.count("1p1*"), 1
+      assert.equal Command.count("1p1*2"), 2
 
     it 'should count variable multiples', ->
       assert.equal Command.count("$"), 1

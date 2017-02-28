@@ -585,7 +585,8 @@ class GridNotation
 #
 class Command
   variableRegexp: /^\$([^\*]+)?(\*(\d+)?)?$/i
-  explicitRegexp: /^(([-0-9\.]+)?[a-z%]+)(\*(\d+)?)?$/i
+  explicitRegexp: /^(([-0-9\.]+)?[a-z%]+[0-9\.]*)(\*(\d+)?)?$/i
+  pointPicaRegexp: /^[-0-9\.]+p[0-9\.]*$/
   wildcardRegexp: /^~(\*(\d*))?$/i
 
   constructor: (args = {}) ->
@@ -621,7 +622,8 @@ class Command
   # Returns a Boolean
   isExplicit: (command = "") =>
     if typeof command is "string"
-      return false if !@explicitRegexp.test command.replace /\s/g, ''
+      command = command.replace /\s/g, ''
+      return false if !@explicitRegexp.test(command)
       return false if @unit.parse(command) == null
       true
     else
@@ -771,7 +773,10 @@ class Unit
   # Returns an object or null if invalid
   parse: (string = "") =>
     string = string.replace /\s/g, ''
-    bits = string.match(/([-0-9\.]+)([a-z%]+)?/i)
+
+    bits = string.match(/[-0-9\.]+p[0-9\.]*(?![a-z])/i)
+    bits = @normalizePoints(bits[0]) if bits
+    bits = string.match(/([-0-9\.]+)([a-z%]+)?/i) if !bits
     return null if !string or string == "" or !bits?
     return null if bits[2] and !@preferredName(bits[2])
 
@@ -786,6 +791,21 @@ class Unit
     value: parseFloat bits[1]
     type: @preferredName bits[2]
     base: @asBaseUnit value: parseFloat(bits[1]), type: @preferredName(bits[2])
+
+  normalizePoints: (string) ->
+    bits = /(-)?([0-9\.]+)p([0-9\.]*)$/i.exec(string)
+    negative = bits[1]?
+    picas = parseFloat(bits[2] || '0')
+    points = parseFloat(bits[3] || '0')
+    total = (points + (picas * 6)) * (if negative then -1 else 1)
+    [
+      string,
+      total,
+      'point'
+    ]
+
+  pointsToString: (n) ->
+    "#{ Math.floor(n / 6)}p#{ if n % 6 then n % 6 else '' }"
 
   # Parse a string and change it to a friendly unit
   #
@@ -802,7 +822,7 @@ class Unit
         'mm'
       when 'pixel', 'pixels', 'px'
         'px'
-      when 'point', 'points', 'pts', 'pt'
+      when 'point', 'points', 'pts', 'pt', 'p'
         'points'
       when 'pica', 'picas'
         'picas'
@@ -845,8 +865,12 @@ class Unit
   stringify: (unit = "") =>
     return null if unit == ""
     return @stringify(@parse(unit)) if typeof unit == "string"
-
-    "#{ unit.value }#{ unit.type }"
+    if unit.type is 'points'
+      @pointsToString(unit.value)
+    else if unit.type is 'picas'
+      @pointsToString(unit.value * 6)
+    else
+      "#{ unit.value }#{ unit.type }"
 
 # Remove leading and trailing whitespace
 #
