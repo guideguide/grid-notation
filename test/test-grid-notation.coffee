@@ -116,6 +116,16 @@ describe 'Grid Notation', ->
       10px | $A | (vl)
       """, info), out
 
+    it 'should parse pica/point succesfully', ->
+      out = [ { location: 6, orientation: 'v' },
+      { location: 7, orientation: 'v' },
+      { location: 21, orientation: 'v' },
+      { location: 28.1, orientation: 'v' } ]
+
+      assert.deepEqual GN.parse("""
+      1p | 0p1 | 1p1*2 | 1p1.1 | (vl)
+      """, info), out
+
     it 'should properly align right aligned fills', ->
       out = [ { location: 10, orientation: 'v' },
       { location: 40, orientation: 'v' },

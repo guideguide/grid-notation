@@ -24,7 +24,7 @@
     }
 
     GridNotation.prototype.parse = function(string, info) {
-      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, j, k, key, l, len, len1, len2, len3, len4, len5, len6, len7, len8, length, m, measuredWidth, n, newCommand, newCommands, o, offset, originalWidth, p, percentValue, percents, q, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref23, ref24, ref25, ref26, ref27, ref3, ref4, ref5, ref6, ref7, ref8, ref9, remainderOffset, remainderPixels, s, stretchDivisions, t, tested, v, variable, wholePixels, wildcardArea, wildcardWidth, wildcards;
+      var adjust, adjustRemainder, command, explicit, explicitSum, fill, fillCollection, fillIterations, fillWidth, gn, grid, guideOrientation, guides, i, insertMarker, j, k, key, l, len, len1, len2, len3, len4, len5, len6, len7, len8, length, m, measuredWidth, newCommand, newCommands, o, offset, originalWidth, p, percentValue, percents, q, r, ref, ref1, ref10, ref11, ref12, ref13, ref14, ref15, ref16, ref17, ref18, ref19, ref2, ref20, ref21, ref22, ref23, ref24, ref25, ref26, ref27, ref3, ref4, ref5, ref6, ref7, ref8, ref9, remainderOffset, remainderPixels, s, stretchDivisions, t, tested, u, v, variable, wholePixels, wildcardArea, wildcardWidth, wildcards;
       if (string == null) {
         string = "";
       }
@@ -110,7 +110,7 @@
           }
           fillCollection = [];
           fillWidth = 0;
-          for (i = n = 1, ref8 = fillIterations; 1 <= ref8 ? n <= ref8 : n >= ref8; i = 1 <= ref8 ? ++n : --n) {
+          for (i = o = 1, ref8 = fillIterations; 1 <= ref8 ? o <= ref8 : o >= ref8; i = 1 <= ref8 ? ++o : --o) {
             if (fill.isVariable) {
               fillCollection = fillCollection.concat(gn.variables[fill.id]);
               fillWidth += lengthOf(fill, gn.variables);
@@ -123,7 +123,7 @@
           wildcardArea -= fillWidth;
           newCommands = [];
           ref9 = grid.commands;
-          for (i = o = 0, len3 = ref9.length; o < len3; i = ++o) {
+          for (i = p = 0, len3 = ref9.length; p < len3; i = ++p) {
             command = ref9[i];
             if (command.isFill) {
               newCommands = newCommands.concat(fillCollection);
@@ -137,8 +137,8 @@
           return el.isExplicit && !el.isFill;
         });
         explicitSum = 0;
-        for (p = 0, len4 = explicit.length; p < len4; p++) {
-          command = explicit[p];
+        for (q = 0, len4 = explicit.length; q < len4; q++) {
+          command = explicit[q];
           explicitSum += command.unit.base;
         }
         if (((ref10 = grid.params.width) != null ? (ref11 = ref10.unit) != null ? ref11.base : void 0 : void 0) == null) {
@@ -178,8 +178,8 @@
             wildcardWidth = Math.floor(wildcardWidth);
             remainderPixels = wildcardArea % wildcards.length;
           }
-          for (q = 0, len5 = wildcards.length; q < len5; q++) {
-            command = wildcards[q];
+          for (r = 0, len5 = wildcards.length; r < len5; r++) {
+            command = wildcards[r];
             command.isWildcard = false;
             command.isExplicit = true;
             command.isFill = true;
@@ -196,7 +196,7 @@
           if (grid.params.remainder === 'l') {
             remainderOffset = wildcards.length - remainderPixels;
           }
-          for (i = r = 0, len6 = wildcards.length; r < len6; i = ++r) {
+          for (i = s = 0, len6 = wildcards.length; s < len6; i = ++s) {
             command = wildcards[i];
             if (i >= remainderOffset && i < remainderOffset + remainderPixels) {
               command.unit = this.unit.parse((wildcardWidth + 1) + "px");
@@ -206,7 +206,7 @@
         insertMarker = offset;
         newCommands = [];
         ref25 = grid.commands;
-        for (i = s = 0, len7 = ref25.length; s < len7; i = ++s) {
+        for (i = t = 0, len7 = ref25.length; t < len7; i = ++t) {
           command = ref25[i];
           if (!command.isGuide || (command.isGuide && !((ref26 = grid.commands[i - 1]) != null ? ref26.isGuide : void 0))) {
             newCommands.push(command);
@@ -214,8 +214,8 @@
         }
         grid.commands = [].concat(newCommands);
         ref27 = grid.commands;
-        for (t = 0, len8 = ref27.length; t < len8; t++) {
-          command = ref27[t];
+        for (u = 0, len8 = ref27.length; u < len8; u++) {
+          command = ref27[u];
           if (command.isGuide) {
             guides.push({
               location: insertMarker,
@@ -741,7 +741,9 @@
   Command = (function() {
     Command.prototype.variableRegexp = /^\$([^\*]+)?(\*(\d+)?)?$/i;
 
-    Command.prototype.explicitRegexp = /^(([-0-9\.]+)?[a-z%]+)(\*(\d+)?)?$/i;
+    Command.prototype.explicitRegexp = /^(([-0-9\.]+)?[a-z%]+[0-9\.]*)(\*(\d+)?)?$/i;
+
+    Command.prototype.pointPicaRegexp = /^[-0-9\.]+p[0-9\.]*$/;
 
     Command.prototype.wildcardRegexp = /^~(\*(\d*))?$/i;
 
@@ -782,7 +784,8 @@
         command = "";
       }
       if (typeof command === "string") {
-        if (!this.explicitRegexp.test(command.replace(/\s/g, ''))) {
+        command = command.replace(/\s/g, '');
+        if (!this.explicitRegexp.test(command)) {
           return false;
         }
         if (this.unit.parse(command) === null) {
@@ -966,7 +969,13 @@
         string = "";
       }
       string = string.replace(/\s/g, '');
-      bits = string.match(/([-0-9\.]+)([a-z%]+)?/i);
+      bits = string.match(/[-0-9\.]+p[0-9\.]*(?![a-z])/i);
+      if (bits) {
+        bits = this.normalizePoints(bits[0]);
+      }
+      if (!bits) {
+        bits = string.match(/([-0-9\.]+)([a-z%]+)?/i);
+      }
       if (!string || string === "" || (bits == null)) {
         return null;
       }
@@ -991,6 +1000,20 @@
           type: this.preferredName(bits[2])
         })
       };
+    };
+
+    Unit.prototype.normalizePoints = function(string) {
+      var bits, negative, picas, points, total;
+      bits = /(-)?([0-9\.]+)p([0-9\.]*)$/i.exec(string);
+      negative = bits[1] != null;
+      picas = parseFloat(bits[2] || '0');
+      points = parseFloat(bits[3] || '0');
+      total = (points + (picas * 6)) * (negative ? -1 : 1);
+      return [string, total, 'point'];
+    };
+
+    Unit.prototype.pointsToString = function(n) {
+      return (Math.floor(n / 6)) + "p" + (n % 6 ? n % 6 : '');
     };
 
     Unit.prototype.preferredName = function(string) {
@@ -1019,6 +1042,7 @@
         case 'points':
         case 'pts':
         case 'pt':
+        case 'p':
           return 'points';
         case 'pica':
         case 'picas':
@@ -1053,7 +1077,7 @@
           unit.value = unit.value / 72;
           break;
         case 'picas':
-          unit.value = unit.value / 6;
+          unit.value = unit.value / 12;
           break;
         default:
           return null;
@@ -1071,7 +1095,13 @@
       if (typeof unit === "string") {
         return this.stringify(this.parse(unit));
       }
-      return "" + unit.value + unit.type;
+      if (unit.type === 'points') {
+        return this.pointsToString(unit.value);
+      } else if (unit.type === 'picas') {
+        return this.pointsToString(unit.value * 6);
+      } else {
+        return "" + unit.value + unit.type;
+      }
     };
 
     return Unit;

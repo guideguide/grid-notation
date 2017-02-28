@@ -20,7 +20,7 @@ info =
 # common grid scenarios to see if the math is being done correctly.
 describe 'Math', ->
 
-  it.only 'should survive zero width scenarios', ->
+  it 'should survive zero width scenarios', ->
     newInfo = {}
     newInfo[k] = v for k, v of info
     newInfo.width = 0
